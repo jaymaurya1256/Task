@@ -8,5 +8,5 @@ import org.jetbrains.annotations.NotNull
 data class Task (
     @PrimaryKey(autoGenerate = true) val id: Int,
     @NotNull val task: String,
-    @NotNull val isActive: Boolean
+    @NotNull val isActive: Int
 )

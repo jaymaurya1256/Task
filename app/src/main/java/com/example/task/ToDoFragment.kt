@@ -33,7 +33,7 @@ class ToDoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.addTask.setOnClickListener {
-            findNavController().navigate(R.id.action_toDoFragment_to_completedFragment)
+
         }
     }
 
