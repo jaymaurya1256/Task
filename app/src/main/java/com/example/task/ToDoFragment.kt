@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.task.database.TaskApplication
 import com.example.task.databinding.FragmentTodoBinding
+import com.example.task.models.TaskViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class ToDoFragment : Fragment() {
 
+    private val sharedViewModel: TaskViewModel = TaskViewModel(TaskApplication())
     private var _binding: FragmentTodoBinding? = null
 
     // This property is only valid between onCreateView and
