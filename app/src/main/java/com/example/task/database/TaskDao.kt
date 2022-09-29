@@ -12,11 +12,11 @@ interface TaskDao  {
     fun getAllCompleted(): LiveData<List<Task>>
 
     @Insert
-    fun addTask(task: Task)
+    suspend fun addTask(task: Task)
 
     @Update
-    fun markComplete(task: Task)
+    suspend fun markComplete(task: Task)
 
     @Delete
-    fun removeTask(task: Task)
+    suspend fun removeTask(task: Task)
 }
