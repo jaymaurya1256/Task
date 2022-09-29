@@ -35,7 +35,8 @@ class ToDoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.addTask.setOnClickListener {
-            sharedViewModel.insert("Hello")
+            val task = binding.inputTask.text.toString()
+            sharedViewModel.insert(task)
         }
     }
 

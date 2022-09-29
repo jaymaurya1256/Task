@@ -43,8 +43,11 @@
        app:layout_constraintLeft_toLeftOf="parent"
        app:layout_constraintRight_toRightOf="parent">
        <com.google.android.material.textfield.TextInputEditText
+           android:id="@+id/inputTask"
+           android:hint="@string/inputTask"
            android:layout_width="300dp"
-           android:layout_height="wrap_content"/>
+           android:layout_height="wrap_content"
+           tools:ignore="InvalidId" />
        <Button
            android:id="@+id/addTask"
            android:layout_width="wrap_content"
