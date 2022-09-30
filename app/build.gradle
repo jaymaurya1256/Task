@@ -52,4 +52,6 @@ dependencies {
 
 // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.4.3"
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.cardview:cardview:1.0.0"
 }
