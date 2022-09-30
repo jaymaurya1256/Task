@@ -26,7 +26,6 @@ class ToDoFragment : Fragment() {
 
     private val sharedViewModel: TaskViewModel by activityViewModels()
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var taskList: LiveData<List<Task>>
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
@@ -42,17 +41,17 @@ class ToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-                recyclerView = binding.recyclerViewForFragmentToDo
-                recyclerView.layoutManager = LinearLayoutManager(activity)
-                lifecycleScope.launch{
-                    TaskViewModel().getData().observe(viewLifecycleOwner,
-                        Observer {
-                            recyclerView.adapter = PendingAdapter(it)
-                        })
-                }
+        binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
+        lifecycleScope.launch{
+            TaskViewModel().getData().observe(viewLifecycleOwner,
+                Observer {
+                    binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it)
+                })
+        }
         binding.addTask.setOnClickListener {
             val task = binding.inputTask.text.toString()
             sharedViewModel.insert(task)
+            binding.inputTask.setText("")
         }
     }
 
