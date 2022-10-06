@@ -19,11 +19,19 @@ class TaskViewModel(): ViewModel() {
             DBHolder.db.taskDao().addTask(Task(0,task,true))
         }
     }
-    suspend fun getData() :LiveData<List<Task>>{
+    suspend fun getDataPending() :LiveData<List<Task>>{
         lateinit var task:LiveData<List<Task>>
         viewModelScope.launch {
             task =  DBHolder.db.taskDao().getAllPending()
         }.join()
         return task
     }
+    suspend fun getDataCompleted() :LiveData<List<Task>>{
+        lateinit var task:LiveData<List<Task>>
+        viewModelScope.launch {
+            task =  DBHolder.db.taskDao().getAllCompleted()
+        }.join()
+        return task
+    }
+
 }

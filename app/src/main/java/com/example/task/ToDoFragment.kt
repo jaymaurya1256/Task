@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.OnSwipe
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -43,7 +44,7 @@ class ToDoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
         lifecycleScope.launch{
-            TaskViewModel().getData().observe(viewLifecycleOwner,
+            TaskViewModel().getDataPending().observe(viewLifecycleOwner,
                 Observer {
                     binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it)
                 })

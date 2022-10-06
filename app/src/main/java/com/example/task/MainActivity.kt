@@ -1,6 +1,7 @@
 package com.example.task
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -10,31 +11,28 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.task.adapters.ViewPager2Adapter
 import com.example.task.database.Task
 import com.example.task.database.TaskDatabase
 import com.example.task.databinding.ActivityMainBinding
+import com.example.task.databinding.ContentMainBinding
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
 
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
+        val listOfFragment = listOf<Fragment>(ToDoFragment(), CompletedFragment())
+        binding.viewPager2.viewPager.adapter = ViewPager2Adapter(listOfFragment,this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,11 +50,4 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
-
 }
