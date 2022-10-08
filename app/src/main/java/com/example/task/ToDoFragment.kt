@@ -14,9 +14,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.task.adapters.PendingAdapter
+import com.example.task.database.DBHolder
 import com.example.task.database.Task
 import com.example.task.databinding.ActivityMainBinding
 import com.example.task.databinding.FragmentTodoBinding
+import com.example.task.databinding.TaskListBinding
 import com.example.task.models.TaskViewModel
 import kotlinx.coroutines.launch
 
@@ -43,12 +45,11 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
-        lifecycleScope.launch{
-            TaskViewModel().getDataPending().observe(viewLifecycleOwner,
-                Observer {
-                    binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it)
-                })
+
+        sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
+            binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it,sharedViewModel)
         }
+
         binding.addTask.setOnClickListener {
             val task = binding.inputTask.text.toString()
             sharedViewModel.insert(task)

@@ -44,7 +44,7 @@ class CompletedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentCompleted.layoutManager = LinearLayoutManager(activity)
         lifecycleScope.launch{
-            TaskViewModel().getDataCompleted().observe(viewLifecycleOwner)
+            TaskViewModel().completedTask.observe(viewLifecycleOwner)
             {
                 binding.recyclerViewForFragmentCompleted.adapter = CompletedAdapter(it)
             }

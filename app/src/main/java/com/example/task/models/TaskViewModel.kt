@@ -1,10 +1,7 @@
 package com.example.task.models
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.task.TaskApplication
 import com.example.task.database.DBHolder
 import com.example.task.database.Task
@@ -14,24 +11,31 @@ import kotlinx.coroutines.launch
 
 class TaskViewModel(): ViewModel() {
 
+    val pendingTask = DBHolder.db.taskDao().getAllPending()
+    val completedTask = DBHolder.db.taskDao().getAllCompleted()
     fun insert(task : String){
         viewModelScope.launch {
             DBHolder.db.taskDao().addTask(Task(0,task,true))
         }
     }
-    suspend fun getDataPending() :LiveData<List<Task>>{
-        lateinit var task:LiveData<List<Task>>
+    fun markCompleted(task: Task){
         viewModelScope.launch {
-            task =  DBHolder.db.taskDao().getAllPending()
-        }.join()
-        return task
+            DBHolder.db.taskDao().updateTask(task.copy(isActive = false))
+        }
     }
-    suspend fun getDataCompleted() :LiveData<List<Task>>{
-        lateinit var task:LiveData<List<Task>>
+    fun markIncomplete(task: Task){
         viewModelScope.launch {
-            task =  DBHolder.db.taskDao().getAllCompleted()
-        }.join()
-        return task
+            DBHolder.db.taskDao().updateTask(task.copy(isActive = true))
+        }
     }
-
+    fun editTask(task: Task, newTask: String){
+        viewModelScope.launch {
+            DBHolder.db.taskDao().updateTask(task.copy(task = newTask))
+        }
+    }
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            DBHolder.db.taskDao().removeTask(task)
+        }
+    }
 }
