@@ -47,7 +47,7 @@ class ToDoFragment : Fragment() {
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
 
         sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
-            binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it,sharedViewModel)
+            binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { sharedViewModel }
         }
 
         binding.addTask.setOnClickListener {

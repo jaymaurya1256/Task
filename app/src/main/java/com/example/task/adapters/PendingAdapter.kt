@@ -11,7 +11,7 @@ import com.example.task.R
 import com.example.task.database.Task
 import com.example.task.models.TaskViewModel
 
-class PendingAdapter(private val taskList: List<Task>, private val sharedViewModel: TaskViewModel) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
+class PendingAdapter(private val taskList: List<Task>,private val lambdaMarkCompleted: ()->TaskViewModel) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
@@ -26,7 +26,7 @@ class PendingAdapter(private val taskList: List<Task>, private val sharedViewMod
         holder.textView.text = taskList[position].task
         holder.listItem.setOnClickListener {
             //lambda implementation should be there i.e sharedViewModel should not be used here
-            sharedViewModel.markCompleted(taskList[position])
+            lambdaMarkCompleted.invoke().markCompleted(taskList[position])
         }
     }
 

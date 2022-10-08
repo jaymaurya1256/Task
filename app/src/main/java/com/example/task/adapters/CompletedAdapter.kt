@@ -11,7 +11,9 @@ import com.example.task.database.Task
 import com.example.task.models.TaskViewModel
 
 
-class CompletedAdapter(private val task: List<Task>, private val sharedViewModel: TaskViewModel) : RecyclerView.Adapter<CompletedAdapter.CompletedViewHolder>() {
+class CompletedAdapter(private val task: List<Task>, private val lambdaMarkInComplete: () -> TaskViewModel)
+    : RecyclerView.Adapter<CompletedAdapter.CompletedViewHolder>() {
+
     class CompletedViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val textView : TextView = view.findViewById(R.id.listItemTextField)
         val taskList: ConstraintLayout = view.findViewById(R.id.list_item)
@@ -25,7 +27,7 @@ class CompletedAdapter(private val task: List<Task>, private val sharedViewModel
     override fun onBindViewHolder(holder: CompletedViewHolder, position: Int) {
         holder.textView.text = task[position].task
         holder.taskList.setOnClickListener{
-            sharedViewModel.markIncomplete(task[position])
+            lambdaMarkInComplete.invoke().markIncomplete(task[position])
         }
         holder.taskList.setOnLongClickListener { true }
     }

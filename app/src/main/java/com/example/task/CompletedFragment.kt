@@ -46,7 +46,7 @@ class CompletedFragment : Fragment() {
         lifecycleScope.launch{
             TaskViewModel().completedTask.observe(viewLifecycleOwner)
             {
-                binding.recyclerViewForFragmentCompleted.adapter = CompletedAdapter(it)
+                binding.recyclerViewForFragmentCompleted.adapter = CompletedAdapter(it) {sharedViewModel}
             }
         }
     }
