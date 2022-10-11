@@ -11,4 +11,7 @@
     <string name="toDo">TODO</string>
     <string name="task_placeholder">This is one of the task you have to do on your own</string>
     <string name="inputTask">Write your task here</string>
+
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
 </resources>
