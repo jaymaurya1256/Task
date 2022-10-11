@@ -3,6 +3,7 @@ package com.example.task.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ class CompletedAdapter(private val task: List<Task>, private val lambdaMarkInCom
     class CompletedViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val textView : TextView = view.findViewById(R.id.listItemTextField)
         val taskList: ConstraintLayout = view.findViewById(R.id.list_item)
+        val radioButton: RadioButton = view.findViewById(R.id.listItemRadioButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompletedViewHolder {
@@ -26,9 +28,11 @@ class CompletedAdapter(private val task: List<Task>, private val lambdaMarkInCom
 
     override fun onBindViewHolder(holder: CompletedViewHolder, position: Int) {
         holder.textView.text = task[position].task
-        holder.taskList.setOnClickListener{
+        holder.radioButton.setOnClickListener{
             lambdaMarkInComplete.invoke().markIncomplete(task[position])
         }
+
+        //Implement delete through this one
         holder.taskList.setOnLongClickListener { true }
     }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ class PendingAdapter(private val taskList: List<Task>,private val lambdaMarkComp
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
+        val radioButton: RadioButton = itemView.findViewById(R.id.listItemRadioButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingViewHolder {
@@ -26,7 +28,7 @@ class PendingAdapter(private val taskList: List<Task>,private val lambdaMarkComp
 
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
         holder.textView.text = taskList[position].task
-        holder.listItem.setOnClickListener {
+        holder.radioButton.setOnClickListener {
             //lambda implementation should be there i.e sharedViewModel should not be used here
             lambdaMarkCompleted.invoke().markCompleted(taskList[position])
         }
