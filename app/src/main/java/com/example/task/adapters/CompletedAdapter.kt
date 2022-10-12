@@ -33,38 +33,13 @@ class CompletedAdapter(private val task: List<Task>, private val onClick: (Task,
     override fun onBindViewHolder(holder: CompletedViewHolder, position: Int) {
         holder.textView.text = task[position].task
         holder.radioButton.setOnClickListener{
-            onClick(task[position],ClickType.SHORT,it)
+            onClick(task[holder.adapterPosition],ClickType.SHORT,it)
         }
 
         holder.taskList.setOnLongClickListener {
-            onClick(task[position], ClickType.LONG,it)
+            onClick(task[holder.adapterPosition], ClickType.LONG,it)
             true
         }
-        //Implement delete through this one
-//        holder.taskList.setOnLongClickListener(object : View.OnLongClickListener{
-//            override fun onLongClick(p0: View?): Boolean {
-//                val popupMenu: PopupMenu = PopupMenu(p0?.context,p0)
-//                popupMenu.menuInflater.inflate(R.menu.item_list_menu,popupMenu.menu)
-//                popupMenu.setOnMenuItemClickListener (object : MenuItem.OnMenuItemClickListener{
-//                    override fun onMenuItemClick(p0: MenuItem?): Boolean {
-//                        when(p0?.itemId){
-//                            R.id.edit -> {
-//                                Toast.makeText(holder.taskList.context,
-//                                "Can't edit when task is already completed",
-//                                Toast.LENGTH_LONG).show()
-//                                return true
-//                            }
-//                            R.id.delete -> {
-//                                onClick.invoke().deleteTask(task[holder.adapterPosition])
-//                                return true
-//                            }
-//                        }
-//                        return true
-//                    }
-//                })
-//                popupMenu.show()
-//            }
-//        })
     }
 
     override fun getItemCount(): Int {
