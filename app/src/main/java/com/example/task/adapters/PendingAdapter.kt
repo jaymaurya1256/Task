@@ -2,6 +2,7 @@ package com.example.task.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -14,7 +15,7 @@ import com.example.task.R
 import com.example.task.database.Task
 import com.example.task.models.TaskViewModel
 
-class PendingAdapter(private val taskList: List<Task>,private val lambdaMarkCompleted: ()->TaskViewModel) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
+class PendingAdapter(private val taskList: List<Task>,private val lambdaViewModel: ()->TaskViewModel) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
@@ -30,19 +31,27 @@ class PendingAdapter(private val taskList: List<Task>,private val lambdaMarkComp
         holder.textView.text = taskList[position].task
         holder.radioButton.setOnClickListener {
             //lambda implementation should be there i.e sharedViewModel should not be used here
-            lambdaMarkCompleted.invoke().markCompleted(taskList[position])
+            lambdaViewModel.invoke().markCompleted(taskList[holder.adapterPosition])
         }
         holder.listItem.setOnLongClickListener(object : View.OnLongClickListener{
             override fun onLongClick(p0: View?): Boolean {
                 val popupMenu: PopupMenu = PopupMenu(p0?.context,p0)
                 popupMenu.menuInflater.inflate(R.menu.item_list_menu,popupMenu.menu)
-                popupMenu.setOnMenuItemClickListener { it ->
-                    when(it.itemId){
-                        R.id.delete -> TODO()
-                        R.id.edit -> TODO()
-                        else -> TODO()
+                popupMenu.setOnMenuItemClickListener (
+                    PopupMenu.OnMenuItemClickListener { it ->
+                        when (it.itemId) {
+                            R.id.delete -> {
+                                lambdaViewModel.invoke().deleteTask(taskList[holder.adapterPosition])
+                                return@OnMenuItemClickListener true
+                            }
+                            R.id.edit -> {
+                                lambdaViewModel.invoke().editTask(taskList[holder.adapterPosition],"Hello")
+                                return@OnMenuItemClickListener true
+                            }
+                            else -> return@OnMenuItemClickListener true
+                        }
                     }
-                }
+                )
 
                 popupMenu.show()
                 return true

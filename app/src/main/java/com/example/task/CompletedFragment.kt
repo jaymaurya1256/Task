@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import com.example.task.adapters.CompletedAdapter
 import com.example.task.database.DBHolder
 import com.example.task.database.TaskDatabase
 import com.example.task.databinding.FragmentCompletedBinding
+import com.example.task.models.ClickType
 import com.example.task.models.TaskViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -44,9 +46,25 @@ class CompletedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentCompleted.layoutManager = LinearLayoutManager(activity)
         lifecycleScope.launch{
-            TaskViewModel().completedTask.observe(viewLifecycleOwner)
-            {
-                binding.recyclerViewForFragmentCompleted.adapter = CompletedAdapter(it) {sharedViewModel}
+            sharedViewModel.completedTask.observe(viewLifecycleOwner) {
+                binding.recyclerViewForFragmentCompleted.adapter = CompletedAdapter(it) { task, clickType, view ->
+                    if (ClickType.SHORT == clickType) {
+                        sharedViewModel.markCompleted(task)
+                    } else {
+                        val popupMenu: PopupMenu = PopupMenu(view.context,view)
+                        popupMenu.menuInflater.inflate(R.menu.item_list_menu,popupMenu.menu)
+                        popupMenu.setOnMenuItemClickListener {
+                            when(it.itemId){
+                                R.id.delete -> { sharedViewModel.deleteTask(task)
+                                true }
+                                R.id.edit -> { sharedViewModel.editTask(task, "Hello")
+                                true }
+                                else -> true
+                            }
+                        }
+                        popupMenu.show()
+                    }
+                }
             }
         }
     }
