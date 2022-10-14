@@ -5,7 +5,7 @@ import androidx.room.*
 
 @Dao
 interface TaskDao  {
-    @Query("SELECT * FROM Task WHERE isActive != 0 ORDER BY id")
+    @Query("SELECT * FROM Task WHERE isActive != 0 ORDER BY id Desc")
     fun getAllPending(): LiveData<List<Task>>
 
     @Query("SELECT * FROM Task WHERE isActive == 0 ORDER BY id")
