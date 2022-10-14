@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.motion.widget.OnSwipe
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
@@ -50,10 +51,23 @@ class ToDoFragment : Fragment() {
             binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { sharedViewModel }
         }
 
-        binding.includedInputField.addTask.setOnClickListener {
-            val task = binding.includedInputField.inputTaskField.text.toString()
-            sharedViewModel.insert(task)
-            binding.includedInputField.inputTaskField.setText("")
+        binding.inputTask.setOnClickListener {
+            binding.inputTask.visibility = View.INVISIBLE
+            binding.includedInputField.insertTask.visibility = View.VISIBLE
+            binding.includedInputField.addTask.setOnClickListener{
+                val task: String = binding.includedInputField.inputTaskField.text.toString().trim()
+                if (task == ""){
+                    binding.inputTask.visibility = View.VISIBLE
+                    binding.includedInputField.insertTask.visibility = View.INVISIBLE
+                    Toast.makeText(this.context,"Can not add the empty task",Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    sharedViewModel.insert(task)
+                    binding.includedInputField.inputTaskField.setText("")
+                    binding.inputTask.visibility = View.VISIBLE
+                    binding.includedInputField.insertTask.visibility = View.INVISIBLE
+                }
+            }
         }
     }
 
