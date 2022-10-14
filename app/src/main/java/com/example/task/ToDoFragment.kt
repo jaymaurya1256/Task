@@ -50,10 +50,10 @@ class ToDoFragment : Fragment() {
             binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { sharedViewModel }
         }
 
-        binding.addTask.setOnClickListener {
-            val task = binding.inputTask.text.toString()
+        binding.includedInputField.addTask.setOnClickListener {
+            val task = binding.includedInputField.inputTaskField.text.toString()
             sharedViewModel.insert(task)
-            binding.inputTask.setText("")
+            binding.includedInputField.inputTaskField.setText("")
         }
     }
 

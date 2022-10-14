@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -49,7 +50,7 @@ class CompletedFragment : Fragment() {
             sharedViewModel.completedTask.observe(viewLifecycleOwner) {
                 binding.recyclerViewForFragmentCompleted.adapter = CompletedAdapter(it) { task, clickType, view ->
                     if (ClickType.SHORT == clickType) {
-                        sharedViewModel.markCompleted(task)
+                        sharedViewModel.markIncomplete(task)
                     } else {
                         val popupMenu: PopupMenu = PopupMenu(view.context,view)
                         popupMenu.menuInflater.inflate(R.menu.item_list_menu,popupMenu.menu)
@@ -57,7 +58,7 @@ class CompletedFragment : Fragment() {
                             when(it.itemId){
                                 R.id.delete -> { sharedViewModel.deleteTask(task)
                                 true }
-                                R.id.edit -> { sharedViewModel.editTask(task, "Hello")
+                                R.id.edit -> { Toast.makeText(view.context,"Can't edit the task after completion",Toast.LENGTH_LONG).show()
                                 true }
                                 else -> true
                             }
