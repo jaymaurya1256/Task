@@ -2,12 +2,16 @@
     <string name="app_name">Task</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label">ToDo</string>
+    <string name="second_fragment_label">Completed</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
     <string name="Add">Add</string>
     <string name="toDo">TODO</string>
     <string name="task_placeholder">This is one of the task you have to do on your own</string>
+    <string name="inputTask">Write your task here</string>
+
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
 </resources>
