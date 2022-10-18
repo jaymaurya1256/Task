@@ -2,5 +2,6 @@ package com.example.task.models
 
 enum class ClickType  {
     SHORT,
-    LONG
+    LONG_DELETE,
+    LONG_EDIT
 }

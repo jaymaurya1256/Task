@@ -15,10 +15,7 @@ import com.example.task.database.Task
 import com.example.task.models.ClickType
 import com.example.task.models.TaskViewModel
 
-
-class CompletedAdapter(private val task: List<Task>, private val onClick: (Task, ClickType, View) -> Unit)
-    : RecyclerView.Adapter<CompletedAdapter.CompletedViewHolder>() {
-
+class CompletedAdapter(private val task: List<Task>, private val onClick: (Task, ClickType, View) -> Unit) : RecyclerView.Adapter<CompletedAdapter.CompletedViewHolder>() {
     class CompletedViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val textView : TextView = view.findViewById(R.id.listItemTextField)
         val taskList: ConstraintLayout = view.findViewById(R.id.list_item)
@@ -35,9 +32,24 @@ class CompletedAdapter(private val task: List<Task>, private val onClick: (Task,
         holder.radioButton.setOnClickListener{
             onClick(task[holder.adapterPosition],ClickType.SHORT,it)
         }
-
         holder.taskList.setOnLongClickListener {
-            onClick(task[holder.adapterPosition], ClickType.LONG,it)
+            val popupMenu: PopupMenu = PopupMenu(it.context,it)
+            popupMenu.menuInflater.inflate(R.menu.item_list_menu,popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.delete -> {
+                        onClick(task[holder.adapterPosition], ClickType.LONG_DELETE, holder.itemView)
+                        true
+                    }
+                    R.id.edit -> {
+                        Toast.makeText(holder.itemView.context,"Can't edit the task after completion",Toast.LENGTH_LONG).show()
+                        true
+                    }
+                    else -> true
+                }
+            }
+            popupMenu.show()
+
             true
         }
     }

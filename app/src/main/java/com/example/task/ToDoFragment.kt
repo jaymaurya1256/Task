@@ -20,6 +20,7 @@ import com.example.task.database.Task
 import com.example.task.databinding.ActivityMainBinding
 import com.example.task.databinding.FragmentTodoBinding
 import com.example.task.databinding.TaskListBinding
+import com.example.task.models.ClickType
 import com.example.task.models.TaskViewModel
 import kotlinx.coroutines.launch
 
@@ -30,7 +31,6 @@ class ToDoFragment : Fragment() {
 
     private val sharedViewModel: TaskViewModel by activityViewModels()
 
-    private lateinit var taskList: LiveData<List<Task>>
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
 
@@ -48,7 +48,23 @@ class ToDoFragment : Fragment() {
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
 
         sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
-            binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { sharedViewModel }
+            binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { task, clickType ->
+                when(clickType){
+                    ClickType.SHORT -> sharedViewModel.markCompleted(task)
+                    ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
+                    else -> {
+                        binding.contentToDo.visibility = View.GONE
+                        binding.includedEditTextField.editTaskField.visibility = View.VISIBLE
+                        binding.includedEditTextField.editText.setText(task.task)
+                        binding.includedEditTextField.editButton.setOnClickListener{
+                            sharedViewModel.editTask(task,binding.includedEditTextField.editText.text.toString())
+                            binding.includedEditTextField.editTaskField.visibility = View.GONE
+                            binding.contentToDo.visibility = View.VISIBLE
+                            Toast.makeText(context, "Task Edited", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         }
 
         binding.inputTask.setOnClickListener {
