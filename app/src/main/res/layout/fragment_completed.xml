@@ -20,8 +20,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewForFragmentCompleted"
-        android:layout_width="380dp"
-        android:layout_height="603dp"
+        android:layout_width="378dp"
+        android:layout_height="680dp"
         android:padding="@dimen/fab_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
