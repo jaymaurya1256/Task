@@ -1,5 +1,6 @@
 package com.example.task
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,7 +23,10 @@ import com.example.task.databinding.FragmentTodoBinding
 import com.example.task.databinding.TaskListBinding
 import com.example.task.models.ClickType
 import com.example.task.models.TaskViewModel
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -33,6 +37,7 @@ class ToDoFragment : Fragment() {
 
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
+    private lateinit var picker: MaterialTimePicker
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +75,26 @@ class ToDoFragment : Fragment() {
         binding.inputTask.setOnClickListener {
             binding.inputTask.visibility = View.INVISIBLE
             binding.includedInputField.insertTask.visibility = View.VISIBLE
+            binding.includedInputField.addDate.setOnClickListener {
+                //binding.includedInputField.timePicker.visibility = View.VISIBLE
+                fun timePicker() {
+                    picker = MaterialTimePicker.Builder()
+                        .setTimeFormat(TimeFormat.CLOCK_12H)
+                        .setHour(12)
+                        .setMinute(0)
+                        .setTitleText("Set Reminder")
+                        .build()
+                    picker.show(requireActivity().supportFragmentManager, "Hello")
+                    picker.addOnPositiveButtonClickListener {
+                        val calendar = Calendar.getInstance()
+                        calendar[Calendar.HOUR_OF_DAY] = picker.hour
+                        calendar[Calendar.MINUTE] = picker.minute
+                        calendar[Calendar.SECOND] = 0
+                        sharedViewModel.setAlarm(calendar)
+                    }
+                }
+                timePicker()
+            }
             binding.includedInputField.addTask.setOnClickListener{
                 val task: String = binding.includedInputField.inputTaskField.text.toString().trim()
                 if (task == ""){
@@ -80,8 +105,9 @@ class ToDoFragment : Fragment() {
                 else{
                     sharedViewModel.insert(task)
                     binding.includedInputField.inputTaskField.setText("")
-                    binding.inputTask.visibility = View.VISIBLE
+                    binding.includedInputField.timePicker.visibility = View.GONE
                     binding.includedInputField.insertTask.visibility = View.INVISIBLE
+                    binding.inputTask.visibility = View.VISIBLE
                 }
             }
         }

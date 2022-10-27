@@ -23,6 +23,17 @@
             android:padding="@dimen/fab_margin"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="40dp">
+            <RadioButton
+                android:id="@+id/addDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_date"/>
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:timePickerMode="clock"
+                android:visibility="gone"/>
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputTaskField"
