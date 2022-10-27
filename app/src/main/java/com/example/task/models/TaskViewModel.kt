@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.view.View
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
@@ -67,4 +68,5 @@ class TaskViewModel(private val app: Application): AndroidViewModel(app) {
             alarmManager.set(AlarmManager.RTC_WAKEUP,triggerTime,pendingIntent)
         }
     }
+
 }
