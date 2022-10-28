@@ -16,4 +16,10 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="notification">You have a Pending Task to do now</string>
+
+    <string name="priority">Set Priority</string>
+    <string name="priority1">Low</string>
+    <string name="priority2">Medium</string>
+    <string name="priority3">High</string>
+
 </resources>

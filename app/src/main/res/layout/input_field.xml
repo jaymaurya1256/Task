@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/insertTaskDateAndPriority"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -23,17 +23,6 @@
             android:padding="@dimen/fab_margin"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="40dp">
-            <RadioButton
-                android:id="@+id/addDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_date"/>
-            <TimePicker
-                android:id="@+id/timePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:timePickerMode="clock"
-                android:visibility="gone"/>
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputTaskField"
@@ -50,6 +39,59 @@
             android:text="@string/Add"
             android:textSize="@dimen/header_size" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/insertTaskDateAndPriority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/addDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_date" />
+
+        <RadioButton
+            android:id="@+id/setPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fab_margin"
+            android:text="@string/priority" />
+
+        <RadioGroup
+            android:id="@+id/priorityOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RadioButton
+                android:id="@+id/lowP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/priority1" />
+
+            <RadioButton
+                android:id="@+id/medP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/priority2" />
+
+            <RadioButton
+                android:id="@+id/highP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/priority3" />
+        </RadioGroup>
     </LinearLayout>
 
 

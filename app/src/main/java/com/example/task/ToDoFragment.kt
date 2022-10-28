@@ -2,6 +2,7 @@ package com.example.task
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import java.util.*
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+private const val TAG = "ToDoFragment"
 class ToDoFragment : Fragment() {
 
     private val sharedViewModel: TaskViewModel by activityViewModels()
@@ -29,6 +31,7 @@ class ToDoFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var picker: MaterialTimePicker
     private lateinit var calendar: Calendar
+    private lateinit var priority: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,10 +68,11 @@ class ToDoFragment : Fragment() {
 
         binding.inputTask.setOnClickListener {
             var isTimerSet: Boolean = false
+            var isPrioritySet: Boolean = false
             binding.inputTask.visibility = View.INVISIBLE
             binding.includedInputField.insertTask.visibility = View.VISIBLE
+            binding.includedInputField.insertTaskDateAndPriority.visibility = View.VISIBLE
             binding.includedInputField.addDate.setOnClickListener {
-                //binding.includedInputField.timePicker.visibility = View.VISIBLE
                 fun timePicker() {
                     picker = MaterialTimePicker.Builder()
                         .setTimeFormat(TimeFormat.CLOCK_12H)
@@ -87,24 +91,61 @@ class ToDoFragment : Fragment() {
                 }
                 timePicker()
             }
+            binding.includedInputField.setPriority.setOnClickListener {
+                if (binding.includedInputField.setPriority.isChecked){
+                    binding.includedInputField.priorityOption.visibility = View.VISIBLE
+                    binding.includedInputField.apply {
+                        lowP.setOnClickListener {
+                            priority = "Low"
+                            isPrioritySet = true
+                        }
+                        medP.setOnClickListener {
+                            priority = "Medium"
+                            isPrioritySet = true
+                        }
+                        highP.setOnClickListener {
+                            priority = "High"
+                            isPrioritySet = true
+                        }
+                    }
+                }
+            }
+
             binding.includedInputField.addTask.setOnClickListener{
-                val task: String = binding.includedInputField.inputTaskField.text.toString().trim()
-                if (task == ""){
+                val taskText: String = binding.includedInputField.inputTaskField.text.toString().trim()
+                if (taskText == ""){
                     binding.inputTask.visibility = View.VISIBLE
                     binding.includedInputField.insertTask.visibility = View.INVISIBLE
+                    binding.includedInputField.insertTaskDateAndPriority.visibility = View.INVISIBLE
                     Toast.makeText(this.context,"Can not add the empty task",Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    sharedViewModel.insert(task)
-                    if (isTimerSet) {
+                    if (isTimerSet == true and isPrioritySet == true){
+                        Log.d(TAG, "onViewCreated: both are set")
+                        sharedViewModel.insert(taskText,calendar.timeInMillis,priority)
                         sharedViewModel.setAlarm(calendar)
                     }
+                    if (isTimerSet == true and isPrioritySet == false){
+                        Log.d(TAG, "onViewCreated: time is set")
+                        sharedViewModel.insert(taskText,calendar.timeInMillis)
+                        sharedViewModel.setAlarm(calendar)
+                    }
+                    if (isPrioritySet == true and isTimerSet == false){
+                        Log.d(TAG, "onViewCreated: priorty is set")
+                        sharedViewModel.insert(taskText,priority)
+                    }
+                    if (isTimerSet == false and isPrioritySet == false){
+                        Log.d(TAG, "onViewCreated: nothing is set")
+                        sharedViewModel.insert(taskText)
+                    }
                     binding.includedInputField.inputTaskField.setText("")
+                    binding.includedInputField.addDate.isChecked = false
+                    binding.includedInputField.setPriority.isChecked = false
                     val view = requireActivity().currentFocus
                     val imm = it.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view?.windowToken,0)
-                    binding.includedInputField.timePicker.visibility = View.GONE
                     binding.includedInputField.insertTask.visibility = View.INVISIBLE
+                    binding.includedInputField.insertTaskDateAndPriority.visibility = View.INVISIBLE
                     binding.inputTask.visibility = View.VISIBLE
                 }
             }

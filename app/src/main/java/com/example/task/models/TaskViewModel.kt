@@ -21,6 +21,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.Nullable
 import java.util.*
 
 private const val TAG = "TaskViewModel"
@@ -30,11 +31,28 @@ class TaskViewModel(private val app: Application): AndroidViewModel(app) {
     val pendingTask = DBHolder.db.taskDao().getAllPending()
     val completedTask = DBHolder.db.taskDao().getAllCompleted()
 
-    fun insert(task : String){
+    fun insert(taskText : String, time: Long, priority: String){
         viewModelScope.launch {
-            DBHolder.db.taskDao().addTask(Task(0,task,true))
+            DBHolder.db.taskDao().addTask(Task(0,taskText,true, time, priority))
         }
     }
+    fun insert(taskText : String, priority: String){
+        viewModelScope.launch {
+            DBHolder.db.taskDao().addTask(Task(0,taskText,true, Calendar.getInstance().timeInMillis - 1000, priority))
+        }
+    }
+    fun insert(taskText : String, time: Long){
+        viewModelScope.launch {
+            DBHolder.db.taskDao().addTask(Task(0,taskText,true, time, "Low"))
+        }
+    }
+    fun insert(taskText : String){
+        viewModelScope.launch {
+            DBHolder.db.taskDao().addTask(Task(0,taskText,true, Calendar.getInstance().timeInMillis -1000, "Low"))
+        }
+    }
+
+
     fun markCompleted(task: Task){
         viewModelScope.launch {
             DBHolder.db.taskDao().updateTask(task.copy(isActive = false))

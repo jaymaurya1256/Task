@@ -1,5 +1,6 @@
 package com.example.task.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.task.MainActivity
@@ -19,6 +21,7 @@ import com.example.task.models.TaskViewModel
 class PendingAdapter(private val taskList: List<Task>, private val onClick: (Task, ClickType)  -> Unit) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
+        val cardView: CardView = itemView.findViewById(R.id.cardView)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
         val radioButton: RadioButton = itemView.findViewById(R.id.listItemRadioButton)
     }
@@ -30,12 +33,19 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
 
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
         holder.textView.text = taskList[position].task
+        //Set the card color according to priority
+        when(taskList[position].priority){
+            "Low" -> holder.cardView.setCardBackgroundColor(Color.GREEN)
+            "Medium" -> holder.cardView.setCardBackgroundColor(Color.YELLOW)
+            "High" -> holder.cardView.setCardBackgroundColor(Color.RED)
+        }
+        //Set the reminder time
         holder.radioButton.setOnClickListener {
             //lambda implementation should be there i.e sharedViewModel should not be used here
             onClick( taskList[position], ClickType.SHORT)
         }
         holder.listItem.setOnLongClickListener { p0 ->
-            val popupMenu: PopupMenu = PopupMenu(p0?.context, p0)
+            val popupMenu = PopupMenu(p0?.context, p0)
             popupMenu.menuInflater.inflate(R.menu.item_list_menu, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener { it ->
                 when (it.itemId) {
