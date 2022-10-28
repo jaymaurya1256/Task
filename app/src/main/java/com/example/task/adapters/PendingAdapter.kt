@@ -2,28 +2,25 @@ package com.example.task.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.PopupMenu
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.task.MainActivity
 import com.example.task.R
 import com.example.task.database.Task
-import com.example.task.databinding.FragmentTodoBinding
 import com.example.task.models.ClickType
-import com.example.task.models.TaskViewModel
 
 class PendingAdapter(private val taskList: List<Task>, private val onClick: (Task, ClickType)  -> Unit) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
         val cardView: CardView = itemView.findViewById(R.id.cardView)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
-        val radioButton: RadioButton = itemView.findViewById(R.id.listItemRadioButton)
+        val radioButton: CheckBox = itemView.findViewById(R.id.checkBox_complete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingViewHolder {

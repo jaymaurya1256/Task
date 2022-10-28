@@ -14,6 +14,7 @@
 
     <string name="add_date">Add date to your task</string>
     <string name="delete">Delete</string>
+    <string name="save">Save</string>
     <string name="edit">Edit</string>
     <string name="notification">You have a Pending Task to do now</string>
 

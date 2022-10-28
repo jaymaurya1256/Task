@@ -23,8 +23,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
-            <RadioButton
-                android:id="@+id/listItemRadioButton"
+            <CheckBox
+                android:id="@+id/checkBox_complete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
