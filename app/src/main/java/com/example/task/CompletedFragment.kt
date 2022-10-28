@@ -49,21 +49,9 @@ class CompletedFragment : Fragment() {
         lifecycleScope.launch{
             sharedViewModel.completedTask.observe(viewLifecycleOwner) {
                 binding.recyclerViewForFragmentCompleted.adapter = CompletedAdapter(it) { task, clickType, view ->
-                    if (ClickType.SHORT == clickType) {
-                        sharedViewModel.markIncomplete(task)
-                    } else {
-                        val popupMenu: PopupMenu = PopupMenu(view.context,view)
-                        popupMenu.menuInflater.inflate(R.menu.item_list_menu,popupMenu.menu)
-                        popupMenu.setOnMenuItemClickListener {
-                            when(it.itemId){
-                                R.id.delete -> { sharedViewModel.deleteTask(task)
-                                true }
-                                R.id.edit -> { Toast.makeText(view.context,"Can't edit the task after completion",Toast.LENGTH_LONG).show()
-                                true }
-                                else -> true
-                            }
-                        }
-                        popupMenu.show()
+                    when(clickType){
+                        ClickType.SHORT -> {sharedViewModel.markIncomplete(task)}
+                        else -> {sharedViewModel.deleteTask(task)}
                     }
                 }
             }
