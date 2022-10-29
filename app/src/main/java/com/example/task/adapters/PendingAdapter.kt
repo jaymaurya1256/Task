@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.task.Color.ArtificialColors
 import com.example.task.R
 import com.example.task.database.Task
 import com.example.task.models.ClickType
@@ -31,10 +32,11 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
         holder.textView.text = taskList[position].task
         //Set the card color according to priority
+        val myColors = ArtificialColors()
         when(taskList[position].priority){
-            "Low" -> holder.cardView.setCardBackgroundColor(Color.GREEN)
-            "Medium" -> holder.cardView.setCardBackgroundColor(Color.YELLOW)
-            "High" -> holder.cardView.setCardBackgroundColor(Color.RED)
+            "LOW" -> holder.cardView.setCardBackgroundColor(myColors.GREEN_COLOR)
+            "MEDIUM" -> holder.cardView.setCardBackgroundColor(myColors.YELLOW_COLOR)
+            "HIGH" -> holder.cardView.setCardBackgroundColor(myColors.RED_COLOR)
         }
         //Set the reminder time
         holder.radioButton.setOnClickListener {
