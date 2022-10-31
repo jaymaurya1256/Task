@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_toDoFragment_to_completedFragment"
             app:destination="@id/completedFragment" />
+        <action
+            android:id="@+id/action_toDoFragment_to_addTaskFragment"
+            app:destination="@id/addTaskFragment" />
     </fragment>
     <fragment
         android:id="@+id/completedFragment"
@@ -20,4 +23,8 @@
             android:id="@+id/action_completedFragment_to_toDoFragment"
             app:destination="@id/toDoFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/addTaskFragment"
+        android:name="com.example.task.AddTaskFragment"
+        android:label="AddTaskFragment" />
 </navigation>

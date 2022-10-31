@@ -33,6 +33,9 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_size_for_card_view"
                 android:textSize="@dimen/text_size_of_tasks"
+                android:shadowColor="@color/black"
+                android:shadowDx="1.5"
+                android:shadowDy="1.3"
                 android:text="@string/task_placeholder" />
         </LinearLayout>
 

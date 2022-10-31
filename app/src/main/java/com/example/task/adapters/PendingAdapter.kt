@@ -30,9 +30,10 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
     }
 
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
-        holder.textView.text = taskList[position].task
-        //Set the card color according to priority
         val myColors = ArtificialColors()
+        holder.textView.text = taskList[position].task
+        holder.textView.setTextColor(Color.WHITE)
+        //Set the card color according to priority
         when(taskList[position].priority){
             "LOW" -> holder.cardView.setCardBackgroundColor(myColors.GREEN_COLOR)
             "MEDIUM" -> holder.cardView.setCardBackgroundColor(myColors.YELLOW_COLOR)
