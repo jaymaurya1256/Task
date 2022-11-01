@@ -21,9 +21,12 @@ import com.example.task.database.TaskDatabase
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.Nullable
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.min
 
 private const val TAG = "TaskViewModel"
 
@@ -45,9 +48,23 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun editTask(task: Task, newTask: String) {
+    fun editTask(id:Int,newTaskDescription: String, hour: Long, minute: Long, priority: Priority) {
         viewModelScope.launch {
-            DBHolder.db.taskDao().updateTask(task.copy(task = newTask))
+            val calendar = Calendar.getInstance()
+            val task: Task
+            calendar.set(Calendar.HOUR_OF_DAY,hour.toInt())
+            calendar.set(Calendar.MINUTE, minute.toInt())
+            calendar.set(Calendar.SECOND,0)
+            task = Task(
+                id = id,
+                task = newTaskDescription,
+                isActive = true,
+                time = calendar.timeInMillis,
+                priority = priority.name
+            )
+
+            DBHolder.db.taskDao().updateTask(task)
+            setAlarm(task)
         }
     }
 
@@ -57,13 +74,13 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    private fun setAlarm(calendar: Calendar, task: String) {
+    private fun setAlarm(task: Task) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(app, AlarmReceiver::class.java).apply {
-            action = task
+            action = task.task
         }
         val pendingIntent = PendingIntent.getBroadcast(app, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        val triggerTime = calendar.timeInMillis
+        val triggerTime = task.time
         Log.d(TAG, "setAlarm: $triggerTime")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(
@@ -95,16 +112,14 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
                 calendar.set(Calendar.HOUR_OF_DAY, hour.toInt())
                 calendar.set(Calendar.MINUTE, minute.toInt())
                 calendar.set(Calendar.SECOND, 0)
-                DBHolder.db.taskDao().addTask(
-                    Task(
-                        id = 0,
-                        task = taskDescription,
-                        priority = priority.name,
-                        isActive = true,
-                        time = calendar.timeInMillis
-                    )
-                )
-                setAlarm(calendar, taskDescription)
+                val task:Task = Task(
+                    id = 0,
+                    task = taskDescription,
+                    priority = priority.name,
+                    isActive = true,
+                    time = calendar.timeInMillis)
+                DBHolder.db.taskDao().addTask(task)
+                setAlarm(task)
             }
         }
     }

@@ -12,7 +12,7 @@ interface TaskDao  {
     fun getAllCompleted(): LiveData<List<Task>>
 
     @Query("SELECT * FROM Task WHERE id == :id")
-    fun getTask(id: Int): Task
+    suspend fun getTask(id: Int): Task
 
     @Insert
     suspend fun addTask(task: Task)

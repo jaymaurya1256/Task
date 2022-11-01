@@ -15,6 +15,8 @@ import com.example.task.Color.ArtificialColors
 import com.example.task.R
 import com.example.task.database.Task
 import com.example.task.models.ClickType
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PendingAdapter(private val taskList: List<Task>, private val onClick: (Task, ClickType)  -> Unit) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -22,6 +24,7 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
         val cardView: CardView = itemView.findViewById(R.id.cardView)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
         val radioButton: CheckBox = itemView.findViewById(R.id.checkBox_complete)
+        val alarmTimeDisplay: TextView = itemView.findViewById(R.id.alarmTimeDisplay)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingViewHolder {
@@ -38,6 +41,13 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
             "LOW" -> holder.cardView.setCardBackgroundColor(myColors.GREEN_COLOR)
             "MEDIUM" -> holder.cardView.setCardBackgroundColor(myColors.YELLOW_COLOR)
             "HIGH" -> holder.cardView.setCardBackgroundColor(myColors.RED_COLOR)
+        }
+        //Display Time in Card View if time is set
+        var hour = SimpleDateFormat("hh", Locale.getDefault()).format(taskList[position].time).toLong()
+        var minute = SimpleDateFormat("mm", Locale.getDefault()).format(taskList[position].time).toLong()
+        val string = "@${hour}:${minute}"
+        if (taskList[position].time != 0L) {
+            holder.alarmTimeDisplay.text = string
         }
         //Set the reminder time
         holder.radioButton.setOnClickListener {

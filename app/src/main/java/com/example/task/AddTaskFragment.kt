@@ -18,7 +18,11 @@ import com.example.task.models.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 private const val TAG = "AddTaskFragment"
 
@@ -31,7 +35,7 @@ class AddTaskFragment: BottomSheetDialogFragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAddTaskBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -40,10 +44,15 @@ class AddTaskFragment: BottomSheetDialogFragment(){
 
         // If ID is -1, we're in add mode
         // If ID != -1, we're in edit mode
-        sharedViewModel.getTask(args.taskId)
-
-        sharedViewModel.task.observe(viewLifecycleOwner) {
-
+        if (args.taskId == -1){
+            insertTask()
+        }
+        else{
+            sharedViewModel.getTask(args.taskId)
+            sharedViewModel.task.observe(viewLifecycleOwner) {
+                binding.buttonAddTask.setText(R.string.edit)
+                editTask(it)
+            }
         }
 
     }
@@ -61,6 +70,7 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                 } else {
                     sharedViewModel.insertTask(taskDescription, hour, minute, priority)
                     Snackbar.make(binding.root, "Task Added", Snackbar.LENGTH_SHORT).show()
+                    hideKeyboard()
                 }
             }
 
@@ -94,6 +104,53 @@ class AddTaskFragment: BottomSheetDialogFragment(){
     }
 
     fun editTask(task: Task) {
+        with(binding){
+            var hour = SimpleDateFormat("hh", Locale.getDefault()).format(task.time).toLong()
+            var minute = SimpleDateFormat("mm", Locale.getDefault()).format(task.time).toLong()
+            var priority = when(task.priority){
+                "LOW" -> Priority.LOW
+                "Medium" -> Priority.MEDIUM
+                else -> Priority.HIGH
 
+            }
+            textFieldTaskDescription.editText?.setText(task.task)
+            buttonAddTask.setOnClickListener {
+                val taskDescription = textFieldTaskDescription.editText?.text.toString().trim()
+                if (taskDescription.isEmpty()) {
+                    textFieldTaskDescription.error = "Please enter a task"
+                } else {
+                    sharedViewModel.editTask(task.id,taskDescription, hour, minute, priority)
+                    binding.buttonAddTask.setText(R.string.Add)
+                    Snackbar.make(binding.root, "Task Added", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            lowP.setOnCheckedChangeListener { _, selected ->
+                if (selected) priority = Priority.LOW
+            }
+
+            mediumP.setOnCheckedChangeListener { _, selected ->
+                if (selected) priority = Priority.MEDIUM
+            }
+
+            highP.setOnCheckedChangeListener { _, selected ->
+                if (selected) priority = Priority.HIGH
+            }
+
+            buttonPickTime.setOnClickListener {
+                val picker = MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_12H)
+                    .setHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
+                    .setMinute(Calendar.getInstance().get(Calendar.MINUTE))
+                    .setTitleText("Select Time")
+                    .build()
+                picker.show(childFragmentManager, "TimePicker")
+                picker.addOnPositiveButtonClickListener {
+                    hour = picker.hour.toLong()
+                    minute = picker.minute.toLong()
+                    Log.d(TAG, "onViewCreated: User picked time: $hour:$minute")
+                }
+            }
+
+        }
     }
 }

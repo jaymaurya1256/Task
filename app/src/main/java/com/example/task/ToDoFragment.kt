@@ -44,39 +44,9 @@ class ToDoFragment : Fragment() {
                     ClickType.SHORT -> sharedViewModel.markCompleted(task)
                     ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
                     else -> {
-                        binding.contentToDo.hide()
                         val action = ToDoFragmentDirections.actionToDoFragmentToAddTaskFragment(task.id)
                         findNavController().navigate(action)
 
-//                        bindingItems!!.buttonAddTask.setText(R.string.edit)
-//                        bindingItems!!.textFieldTaskDescription.editText!!.setText(task.task)
-//                        when(task.priority) {
-//                            "Low" -> bindingItems!!.lowP.isChecked = true
-//                            "Medium" -> bindingItems!!.mediumP.isChecked = true
-//                            "High" -> bindingItems!!.highP.isChecked = true
-//                        }
-//                        itemListDialogFragment.show(requireActivity().supportFragmentManager,itemListDialogFragment.tag)
-//                        bindingItems!!.buttonAddTask.setOnClickListener{
-//                            val hour = TimeUnit.HOURS.convert(task.time, TimeUnit.HOURS)
-//                            val minute = TimeUnit.MINUTES.convert(task.time, TimeUnit.MINUTES)
-//                            val priority:Priority
-//                            when(task.priority) {
-//                                "LOW" -> priority = Priority.LOW
-//                                "MEDIUM" -> priority = Priority.MEDIUM
-//                                "HIGH" -> priority = Priority.HIGH
-//                                else -> priority = Priority.LOW
-//                            }
-//                            val taskDescription = bindingItems!!.textFieldTaskDescription.editText?.text.toString().trim()
-//                            if (taskDescription.isEmpty()) {
-//                                bindingItems!!.textFieldTaskDescription.error = "Please enter a task"
-//                            } else {
-//                                sharedViewModel.insertTask(taskDescription, hour, minute, priority)
-//                                itemListDialogFragment.dismiss()
-//                                Snackbar.make(binding.root, "Task Added", Snackbar.LENGTH_SHORT).show()
-//                            }
-//                            bindingItems!!.buttonAddTask.setText(R.string.Add)
-//                        }
-//                    }
                     }
                 }
             }
