@@ -97,7 +97,7 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                 picker.addOnPositiveButtonClickListener {
                     hour = picker.hour.toLong()
                     minute = picker.minute.toLong()
-                    Log.d(TAG, "onViewCreated: User picked time: $hour:$minute")
+                    buttonPickTime.text = "Alarm set at $hour:$minute"
                 }
             }
         }
@@ -147,7 +147,7 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                 picker.addOnPositiveButtonClickListener {
                     hour = picker.hour.toLong()
                     minute = picker.minute.toLong()
-                    Log.d(TAG, "onViewCreated: User picked time: $hour:$minute")
+                    buttonPickTime.text = "Alarm set at $hour:$minute"
                 }
             }
 
