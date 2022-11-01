@@ -12,11 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.task.adapters.PendingAdapter
 import com.example.task.databinding.FragmentTodoBinding
-import com.example.task.models.ClickType
-import com.example.task.models.Priority
-import com.example.task.models.TaskViewModel
-import com.example.task.models.hide
-import com.example.task.models.showKeyboard
+import com.example.task.models.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -43,7 +39,7 @@ class ToDoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -60,6 +56,11 @@ class ToDoFragment : Fragment() {
                     ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
                     else -> {
                         binding.contentToDo.hide()
+                        PurposeToNavigate().purposeToNavigate = "EditTask"
+                        val id = task.id
+                        val action = ToDoFragmentDirection
+                        findNavController().navigate(R.id.action_toDoFragment_to_addTaskFragment)
+
 //                        bindingItems!!.buttonAddTask.setText(R.string.edit)
 //                        bindingItems!!.textFieldTaskDescription.editText!!.setText(task.task)
 //                        when(task.priority) {
@@ -94,6 +95,7 @@ class ToDoFragment : Fragment() {
             }
 
             binding.fabAddTask.setOnClickListener {
+                PurposeToNavigate().purposeToNavigate = "InsertTask"
                 findNavController().navigate(R.id.action_toDoFragment_to_addTaskFragment)
             }
         }

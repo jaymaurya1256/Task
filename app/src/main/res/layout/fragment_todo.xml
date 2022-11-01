@@ -51,9 +51,9 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <include
-        android:id="@+id/includedEditTextField"
-        layout="@layout/edit_field" />
+<!--    <include-->
+<!--        android:id="@+id/includedEditTextField"-->
+<!--        layout="@layout/edit_field" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

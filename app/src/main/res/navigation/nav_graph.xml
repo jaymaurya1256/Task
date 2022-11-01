@@ -26,5 +26,10 @@
     <dialog
         android:id="@+id/addTaskFragment"
         android:name="com.example.task.AddTaskFragment"
-        android:label="AddTaskFragment" />
+        android:label="AddTaskFragment" >
+        <argument
+            android:name="task"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </dialog>
 </navigation>

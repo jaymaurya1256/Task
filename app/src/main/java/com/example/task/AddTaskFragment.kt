@@ -10,12 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import com.example.task.database.Task
 import com.example.task.databinding.FragmentAddTaskBinding
 import com.example.task.databinding.FragmentTodoBinding
-import com.example.task.models.Priority
-import com.example.task.models.TaskViewModel
-import com.example.task.models.hide
-import com.example.task.models.showKeyboard
+import com.example.task.models.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -37,6 +35,15 @@ class AddTaskFragment: BottomSheetDialogFragment(){
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "onViewCreated: Entered OnViewCreated")
+        if (PurposeToNavigate().purposeToNavigate == "EditTask") {
+            editTask(task)
+        }
+        else {
+            insertTask()
+        }
+
+    }
+    fun insertTask(){
         with (binding) {
             var hour = -1L
             var minute = -1L
@@ -51,19 +58,19 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                 }
             }
 
-            this.lowP.setOnCheckedChangeListener { _, selected ->
+            lowP.setOnCheckedChangeListener { _, selected ->
                 if (selected) priority = Priority.LOW
             }
 
-            this.mediumP.setOnCheckedChangeListener { _, selected ->
+            mediumP.setOnCheckedChangeListener { _, selected ->
                 if (selected) priority = Priority.MEDIUM
             }
 
-            this.highP.setOnCheckedChangeListener { _, selected ->
+            highP.setOnCheckedChangeListener { _, selected ->
                 if (selected) priority = Priority.HIGH
             }
 
-            this.buttonPickTime.setOnClickListener {
+            buttonPickTime.setOnClickListener {
                 val picker = MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_12H)
                     .setHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY))
@@ -78,7 +85,8 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                 }
             }
         }
-
+    }
+    fun editTask(task: Task){
 
     }
 }
