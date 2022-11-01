@@ -17,10 +17,6 @@ enum class Priority {
     HIGH;
 }
 
-class PurposeToNavigate {
-    var purposeToNavigate = "InsertTask"
-}
-
 fun Fragment.hideKeyboard() {
     val view = requireActivity().currentFocus
     val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
+import androidx.room.Room
 import com.example.task.AlarmReceiver
 import com.example.task.MainActivity
 import com.example.task.TaskApplication
@@ -30,6 +31,7 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val pendingTask = DBHolder.db.taskDao().getAllPending()
     val completedTask = DBHolder.db.taskDao().getAllCompleted()
+    val task = MutableLiveData<Task>()
 
     fun markCompleted(task: Task) {
         viewModelScope.launch {
@@ -104,6 +106,12 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
                 )
                 setAlarm(calendar, taskDescription)
             }
+        }
+    }
+
+    fun getTask(taskId: Int) {
+        viewModelScope.launch {
+            task.value = DBHolder.db.taskDao().getTask(taskId)
         }
     }
 }

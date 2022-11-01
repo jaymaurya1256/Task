@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.example.task.database.Task
 import com.example.task.databinding.FragmentAddTaskBinding
 import com.example.task.databinding.FragmentTodoBinding
@@ -23,7 +24,8 @@ private const val TAG = "AddTaskFragment"
 
 class AddTaskFragment: BottomSheetDialogFragment(){
     private lateinit var binding: FragmentAddTaskBinding
-    val sharedViewModel : TaskViewModel by activityViewModels()
+    private val sharedViewModel : TaskViewModel by activityViewModels()
+    private val args by navArgs<AddTaskFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,19 +37,23 @@ class AddTaskFragment: BottomSheetDialogFragment(){
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "onViewCreated: Entered OnViewCreated")
-        if (PurposeToNavigate().purposeToNavigate == "EditTask") {
-            editTask(task)
-        }
-        else {
-            insertTask()
+
+        // If ID is -1, we're in add mode
+        // If ID != -1, we're in edit mode
+        sharedViewModel.getTask(args.taskId)
+
+        sharedViewModel.task.observe(viewLifecycleOwner) {
+
         }
 
     }
+
     fun insertTask(){
         with (binding) {
             var hour = -1L
             var minute = -1L
             var priority = Priority.LOW
+
             buttonAddTask.setOnClickListener {
                 val taskDescription = textFieldTaskDescription.editText?.text.toString().trim()
                 if (taskDescription.isEmpty()) {
@@ -86,7 +92,8 @@ class AddTaskFragment: BottomSheetDialogFragment(){
             }
         }
     }
-    fun editTask(task: Task){
+
+    fun editTask(task: Task) {
 
     }
 }

@@ -1,26 +1,17 @@
 package com.example.task
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.task.adapters.PendingAdapter
 import com.example.task.databinding.FragmentTodoBinding
 import com.example.task.models.*
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.system.exitProcess
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -34,7 +25,6 @@ class ToDoFragment : Fragment() {
 
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
-    private lateinit var picker: MaterialTimePicker
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +32,6 @@ class ToDoFragment : Fragment() {
     ): View {
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,10 +45,8 @@ class ToDoFragment : Fragment() {
                     ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
                     else -> {
                         binding.contentToDo.hide()
-                        PurposeToNavigate().purposeToNavigate = "EditTask"
-                        val id = task.id
-                        val action = ToDoFragmentDirection
-                        findNavController().navigate(R.id.action_toDoFragment_to_addTaskFragment)
+                        val action = ToDoFragmentDirections.actionToDoFragmentToAddTaskFragment(task.id)
+                        findNavController().navigate(action)
 
 //                        bindingItems!!.buttonAddTask.setText(R.string.edit)
 //                        bindingItems!!.textFieldTaskDescription.editText!!.setText(task.task)
@@ -95,7 +82,6 @@ class ToDoFragment : Fragment() {
             }
 
             binding.fabAddTask.setOnClickListener {
-                PurposeToNavigate().purposeToNavigate = "InsertTask"
                 findNavController().navigate(R.id.action_toDoFragment_to_addTaskFragment)
             }
         }
