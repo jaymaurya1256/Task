@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.task.database.Task
 import com.example.task.databinding.FragmentAddTaskBinding
@@ -46,18 +47,16 @@ class AddTaskFragment: BottomSheetDialogFragment(){
         // If ID != -1, we're in edit mode
         if (args.taskId == -1){
             insertTask()
-        }
-        else{
+        } else {
             sharedViewModel.getTask(args.taskId)
             sharedViewModel.task.observe(viewLifecycleOwner) {
-                binding.buttonAddTask.setText(R.string.edit)
                 editTask(it)
             }
         }
 
     }
 
-    fun insertTask(){
+    private fun insertTask() {
         with (binding) {
             var hour = -1L
             var minute = -1L
@@ -71,6 +70,7 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                     sharedViewModel.insertTask(taskDescription, hour, minute, priority)
                     Snackbar.make(binding.root, "Task Added", Snackbar.LENGTH_SHORT).show()
                     hideKeyboard()
+                    findNavController().popBackStack()
                 }
             }
 
@@ -103,11 +103,12 @@ class AddTaskFragment: BottomSheetDialogFragment(){
         }
     }
 
-    fun editTask(task: Task) {
+    private fun editTask(task: Task) {
         with(binding){
+            buttonAddTask.setText(R.string.edit)
             var hour = SimpleDateFormat("hh", Locale.getDefault()).format(task.time).toLong()
             var minute = SimpleDateFormat("mm", Locale.getDefault()).format(task.time).toLong()
-            var priority = when(task.priority){
+            var priority = when(task.priority) {
                 "LOW" -> Priority.LOW
                 "Medium" -> Priority.MEDIUM
                 else -> Priority.HIGH
@@ -120,8 +121,8 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                     textFieldTaskDescription.error = "Please enter a task"
                 } else {
                     sharedViewModel.editTask(task.id,taskDescription, hour, minute, priority)
-                    binding.buttonAddTask.setText(R.string.Add)
-                    Snackbar.make(binding.root, "Task Added", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Task Edited", Snackbar.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
                 }
             }
             lowP.setOnCheckedChangeListener { _, selected ->

@@ -44,15 +44,14 @@ class ToDoFragment : Fragment() {
                     ClickType.SHORT -> sharedViewModel.markCompleted(task)
                     ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
                     else -> {
-                        val action = ToDoFragmentDirections.actionToDoFragmentToAddTaskFragment(task.id)
+                        val action = HomeFragmentDirections.actionHomeFragmentToAddTaskFragment(task.id)
                         findNavController().navigate(action)
-
                     }
                 }
             }
 
             binding.fabAddTask.setOnClickListener {
-                findNavController().navigate(R.id.action_toDoFragment_to_addTaskFragment)
+                findNavController().navigate(R.id.action_homeFragment_to_addTaskFragment)
             }
         }
     }

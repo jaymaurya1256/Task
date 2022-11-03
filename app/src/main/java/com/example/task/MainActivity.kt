@@ -32,9 +32,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val listOfFragment = listOf<Fragment>(ToDoFragment(), CompletedFragment())
-        binding.viewPager2.viewPager.adapter = ViewPager2Adapter(listOfFragment,this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
