@@ -1,10 +1,12 @@
 package com.example.task
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,6 +54,13 @@ class ToDoFragment : Fragment() {
 
             binding.fabAddTask.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_addTaskFragment)
+            }
+            binding.info.setOnClickListener{
+                val intent = Intent(this.context, PopUpWindow::class.java)
+                startActivity(intent)
+            }
+            binding.clearAll.setOnClickListener {
+                sharedViewModel.deleteAll()
             }
         }
     }

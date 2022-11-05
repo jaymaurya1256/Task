@@ -9,6 +9,7 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.TimePicker
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
 import androidx.room.Room
@@ -51,11 +52,10 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
     fun editTask(id:Int,newTaskDescription: String, hour: Long, minute: Long, priority: Priority) {
         viewModelScope.launch {
             val calendar = Calendar.getInstance()
-            val task: Task
             calendar.set(Calendar.HOUR_OF_DAY,hour.toInt())
             calendar.set(Calendar.MINUTE, minute.toInt())
             calendar.set(Calendar.SECOND,0)
-            task = Task(
+            val task = Task(
                 id = id,
                 task = newTaskDescription,
                 isActive = true,
@@ -70,16 +70,29 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
 
     fun deleteTask(task: Task) {
         viewModelScope.launch {
+            removeAlarm(task)
             DBHolder.db.taskDao().removeTask(task)
         }
     }
+    fun deleteAll(){
+        TODO()
+    }
+    private fun removeAlarm(task: Task) {
+        val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(app, AlarmReceiver::class.java).apply {
+            action = task.task
+        }
+        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, 0)
+        alarmManager.cancel(pendingIntent)
+    }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setAlarm(task: Task) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(app, AlarmReceiver::class.java).apply {
             action = task.task
         }
-        val pendingIntent = PendingIntent.getBroadcast(app, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, 0)
         val triggerTime = task.time
         Log.d(TAG, "setAlarm: $triggerTime")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

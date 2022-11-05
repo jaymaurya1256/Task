@@ -95,9 +95,19 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                     .build()
                 picker.show(childFragmentManager, "TimePicker")
                 picker.addOnPositiveButtonClickListener {
-                    hour = picker.hour.toLong()
-                    minute = picker.minute.toLong()
-                    buttonPickTime.text = "Alarm set at $hour:$minute"
+                    val calendar = Calendar.getInstance()
+                    calendar.set(Calendar.HOUR_OF_DAY, picker.hour)
+                    calendar.set(Calendar.MINUTE, picker.minute)
+                    calendar.set(Calendar.SECOND, 0)
+                    if (Calendar.getInstance().time < calendar.time){
+                        val timeFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(calendar.timeInMillis)
+                        hour = picker.hour.toLong()
+                        minute = picker.minute.toLong()
+                        buttonPickTime.text = "Alarm set at $timeFormatter"
+                    }
+                    else{
+                        Snackbar.make(this.root,"Selected time must be greater than current",Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -146,9 +156,19 @@ class AddTaskFragment: BottomSheetDialogFragment(){
                     .build()
                 picker.show(childFragmentManager, "TimePicker")
                 picker.addOnPositiveButtonClickListener {
-                    hour = picker.hour.toLong()
-                    minute = picker.minute.toLong()
-                    buttonPickTime.text = "Alarm set at $hour:$minute"
+                    val calendar = Calendar.getInstance()
+                    calendar.set(Calendar.HOUR_OF_DAY, picker.hour)
+                    calendar.set(Calendar.MINUTE, picker.minute)
+                    calendar.set(Calendar.SECOND, 0)
+                    if (Calendar.getInstance().timeInMillis < calendar.timeInMillis){
+                        val timeFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(calendar.timeInMillis)
+                        hour = picker.hour.toLong()
+                        minute = picker.minute.toLong()
+                        buttonPickTime.text = "Alarm set at $timeFormatter"
+                    }
+                    else{
+                        Snackbar.make(this.root,"Selected time must be greater than current",Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
 
