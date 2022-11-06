@@ -44,13 +44,6 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
             "MEDIUM" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.dark_orange))
             "HIGH" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red))
         }
-        //Display Time in Card View if time is set
-//        val string = String.format("%02d:%02d:%02d",
-//            TimeUnit.MILLISECONDS.toHours(taskList[position].time),
-//            TimeUnit.MILLISECONDS.toMinutes(taskList[position].time) -
-//                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(taskList[position].time)),
-//            TimeUnit.MILLISECONDS.toSeconds(taskList[position].time) -
-//                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(taskList[position].time)));
         val hour = SimpleDateFormat("hh", Locale.getDefault()).format(taskList[position].time).toLong()
         val minute = SimpleDateFormat("mm", Locale.getDefault()).format(taskList[position].time).toLong()
         val amPm = SimpleDateFormat("a", Locale.getDefault()).format(taskList[position].time)

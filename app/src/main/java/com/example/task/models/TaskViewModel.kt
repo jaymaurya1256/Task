@@ -49,7 +49,8 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun editTask(id:Int,newTaskDescription: String, hour: Long, minute: Long, priority: Priority) {
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun editTask(id:Int, newTaskDescription: String, hour: Long, minute: Long, priority: Priority) {
         viewModelScope.launch {
             val calendar = Calendar.getInstance()
             calendar.set(Calendar.HOUR_OF_DAY,hour.toInt())
@@ -64,25 +65,30 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
             )
 
             DBHolder.db.taskDao().updateTask(task)
+            removeAlarm(task)
             setAlarm(task)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun deleteTask(task: Task) {
         viewModelScope.launch {
-            removeAlarm(task)
+            if(task.time > Calendar.getInstance().timeInMillis){
+                removeAlarm(task)
+            }
             DBHolder.db.taskDao().removeTask(task)
         }
     }
     fun deleteAll(){
         TODO()
     }
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun removeAlarm(task: Task) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(app, AlarmReceiver::class.java).apply {
             action = task.task
         }
-        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManager.cancel(pendingIntent)
     }
 
@@ -92,7 +98,7 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
         val intent = Intent(app, AlarmReceiver::class.java).apply {
             action = task.task
         }
-        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val triggerTime = task.time
         Log.d(TAG, "setAlarm: $triggerTime")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -106,6 +112,7 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun insertTask(taskDescription: String, hour: Long, minute: Long, priority: Priority) {
         if (hour == -1L || minute == -1L) {
             viewModelScope.launch {
