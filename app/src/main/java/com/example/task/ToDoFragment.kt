@@ -60,7 +60,7 @@ class ToDoFragment : Fragment() {
                 startActivity(intent)
             }
             binding.clearAll.setOnClickListener {
-                sharedViewModel.deleteAll()
+                sharedViewModel.deleteAllFromPending()
             }
         }
     }

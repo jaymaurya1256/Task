@@ -22,4 +22,10 @@ interface TaskDao  {
 
     @Delete
     suspend fun removeTask(task: Task)
+
+    @Query("DELETE FROM Task WHERE isActive != 0 ")
+    suspend fun deleteAllFromPending()
+
+    @Query("DELETE FROM Task WHERE isActive == 0")
+    suspend fun deleteAllFromCompleted()
 }

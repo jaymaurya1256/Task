@@ -37,15 +37,19 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
     val completedTask = DBHolder.db.taskDao().getAllCompleted()
     val task = MutableLiveData<Task>()
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun markCompleted(task: Task) {
         viewModelScope.launch {
             DBHolder.db.taskDao().updateTask(task.copy(isActive = false))
+            removeAlarm(task)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun markIncomplete(task: Task) {
         viewModelScope.launch {
             DBHolder.db.taskDao().updateTask(task.copy(isActive = true))
+            setAlarm(task)
         }
     }
 
@@ -79,16 +83,30 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
             DBHolder.db.taskDao().removeTask(task)
         }
     }
-    fun deleteAll(){
-        TODO()
+
+    fun deleteAllFromPending(){
+        viewModelScope.launch {
+            DBHolder.db.taskDao().deleteAllFromPending()
+        }
     }
+    fun deleteAllFromCompleted(){
+        viewModelScope.launch {
+            DBHolder.db.taskDao().deleteAllFromCompleted()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.M)
     private fun removeAlarm(task: Task) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(app, AlarmReceiver::class.java).apply {
             action = task.task
         }
-        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(
+            app,
+            task.id,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
         alarmManager.cancel(pendingIntent)
     }
 
@@ -98,7 +116,7 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
         val intent = Intent(app, AlarmReceiver::class.java).apply {
             action = task.task
         }
-        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, PendingIntent.FLAG_IMMUTABLE)
         val triggerTime = task.time
         Log.d(TAG, "setAlarm: $triggerTime")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -56,6 +56,9 @@ class CompletedFragment : Fragment() {
                 }
             }
         }
+        binding.clearAll.setOnClickListener {
+            sharedViewModel.deleteAllFromCompleted()
+        }
     }
 
     override fun onDestroyView() {
