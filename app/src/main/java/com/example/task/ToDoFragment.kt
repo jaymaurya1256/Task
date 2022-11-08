@@ -44,6 +44,18 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
+        val lottieAnimationView = binding.lottieTodo
+        sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
+            if (it.isEmpty()){
+                lottieAnimationView.visibility = View.VISIBLE
+                lottieAnimationView.setAnimation(R.raw.todo_animation)
+                lottieAnimationView.loop(true)
+                lottieAnimationView.playAnimation()
+            }
+            else{
+                lottieAnimationView.visibility = View.GONE
+            }
+        }
 
         sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
             binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { task, clickType ->
@@ -56,7 +68,6 @@ class ToDoFragment : Fragment() {
                     }
                 }
             }
-
             binding.fabAddTask.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_addTaskFragment)
             }
@@ -66,13 +77,13 @@ class ToDoFragment : Fragment() {
             }
             binding.clearAll.setOnClickListener {
                 val alertDialog = AlertDialog.Builder(requireContext())
-                alertDialog.setMessage(R.string.delete_all)
+                alertDialog.setMessage(R.string.delete_all_from_pending)
                 alertDialog.setCancelable(false)
-                alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
+                alertDialog.setPositiveButton(android.R.string.yes) { _, _ ->
                     sharedViewModel.deleteAllFromPending()
                 }
 
-                alertDialog.setNegativeButton(android.R.string.no) { dialog, which ->
+                alertDialog.setNegativeButton(android.R.string.no) { dialog, _ ->
                     dialog.cancel()
                 }
                 alertDialog.show()

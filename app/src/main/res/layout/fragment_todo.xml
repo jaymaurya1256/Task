@@ -33,6 +33,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_todo"
+        android:layout_width="376dp"
+        android:layout_height="556dp"
+        android:layout_margin="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/fab_add_task"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toDo" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewForFragmentToDo"
         android:layout_width="match_parent"
@@ -40,10 +51,12 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_constraintBottom_toTopOf="@id/fab_add_task"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.187"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toDo" />
+        app:layout_constraintTop_toBottomOf="@+id/toDo"
+        app:layout_constraintVertical_bias="0.937" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

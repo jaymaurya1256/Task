@@ -12,7 +12,8 @@
     <string name="add_button">Button to add the task</string>
     <string name="task_placeholder">This is one of the task you have to do on your own</string>
     <string name="inputTask">Write your task here</string>
-    <string name="delete_all">Are you sure to delete all the record from Database?</string>
+    <string name="delete_all_from_pending">Are you sure you want to delete all the pending record from Database?</string>
+    <string name="delete_all_from_completed">Are you sure you want to delete all the completed record from Database?</string>
     <string name="info_title">App Info</string>
     <string name="info_content">Hi. This is to guide you to use the app.\n
         You can add/remove task according to your need.\n
