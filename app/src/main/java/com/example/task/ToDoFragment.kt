@@ -1,12 +1,16 @@
 package com.example.task
 
+import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +40,7 @@ class ToDoFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
@@ -60,7 +65,17 @@ class ToDoFragment : Fragment() {
                 startActivity(intent)
             }
             binding.clearAll.setOnClickListener {
-                sharedViewModel.deleteAllFromPending()
+                val alertDialog = AlertDialog.Builder(requireContext())
+                alertDialog.setMessage(R.string.delete_all)
+                alertDialog.setCancelable(false)
+                alertDialog.setPositiveButton(android.R.string.yes) { dialog, which ->
+                    sharedViewModel.deleteAllFromPending()
+                }
+
+                alertDialog.setNegativeButton(android.R.string.no) { dialog, which ->
+                    dialog.cancel()
+                }
+                alertDialog.show()
             }
         }
     }
