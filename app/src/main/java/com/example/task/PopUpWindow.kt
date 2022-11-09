@@ -13,7 +13,6 @@ class PopUpWindow : AppCompatActivity() {
     private lateinit var binding: WindowPopUpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(0,0)
         binding = WindowPopUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

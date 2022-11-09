@@ -12,7 +12,9 @@ import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.task.adapters.PendingAdapter
@@ -21,6 +23,7 @@ import com.example.task.databinding.FragmentTodoBinding
 import com.example.task.models.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -62,42 +65,46 @@ class ToDoFragment : Fragment() {
             }
         }
 
-        sharedViewModel.pendingTask.observe(viewLifecycleOwner) { it ->
-            binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { task, clickType ->
-                when (clickType) {
-                    ClickType.SHORT -> sharedViewModel.markCompleted(task)
-                    ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
-                    else -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToAddTaskFragment(task.id)
-                        findNavController().navigate(action)
+        lifecycleScope.launch{
+            sharedViewModel.pendingTask.observe(viewLifecycleOwner) { it ->
+                binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { task, clickType ->
+                    when (clickType) {
+                        ClickType.SHORT -> sharedViewModel.markCompleted(task)
+                        ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
+                        else -> {
+                            val action =
+                                HomeFragmentDirections.actionHomeFragmentToAddTaskFragment(task.id)
+                            findNavController().navigate(action)
+                        }
                     }
-                }
-            }
-            binding.fabAddTask.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_addTaskFragment)
-            }
-            binding.info.setOnClickListener{
-                val intent = Intent(this.context, PopUpWindow::class.java)
-                startActivity(intent)
-            }
-            binding.clearAll.setOnClickListener {
-                if(taskTodo.value!!.isEmpty()){
-                    Snackbar.make(it, R.string.list_empty,Snackbar.LENGTH_SHORT).show()
-                }
-                else{
-                    val alertDialog = AlertDialog.Builder(requireContext())
-                    alertDialog.setMessage(R.string.delete_all_from_pending)
-                    alertDialog.setCancelable(false)
-                    alertDialog.setPositiveButton(android.R.string.yes) { _, _ ->
-                        sharedViewModel.deleteAllFromPending()
-                    }
-
-                    alertDialog.setNegativeButton(android.R.string.no) { dialog, _ ->
-                        dialog.cancel()
-                    }
-                    alertDialog.show()
                 }
             }
         }
+        binding.fabAddTask.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_addTaskFragment)
+        }
+        binding.info.setOnClickListener{
+            val intent = Intent(this.context, PopUpWindow::class.java)
+            startActivity(intent)
+        }
+        binding.clearAll.setOnClickListener {
+            if(taskTodo.value!!.isEmpty()){
+                Snackbar.make(it, R.string.list_empty,Snackbar.LENGTH_SHORT).show()
+            }
+            else{
+                val alertDialog = AlertDialog.Builder(requireContext())
+                alertDialog.setMessage(R.string.delete_all_from_pending)
+                alertDialog.setCancelable(false)
+                alertDialog.setPositiveButton(android.R.string.yes) { _, _ ->
+                    sharedViewModel.deleteAllFromPending()
+                }
+
+                alertDialog.setNegativeButton(android.R.string.no) { dialog, _ ->
+                    dialog.cancel()
+                }
+                alertDialog.show()
+            }
+        }
+
     }
 }
