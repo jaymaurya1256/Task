@@ -16,7 +16,7 @@
     <string name="list_empty">List is already empty</string>
     <string name="delete_all_from_completed">Are you sure you want to delete all the completed record from Database?</string>
     <string name="info_title">App Info</string>
-    <string name="info_content">Hi. This is to guide you to use the app.\n\n\n
+    <string name="info_content">\nHi. This is to guide you to use the app.\n\n\n
         You can add/remove task according to your need.\n
         \t1. To add a task, Tap on the bottom most button with "+" symbol.\n
         \t2. Write the task you want to add\n
