@@ -13,16 +13,17 @@
     <string name="task_placeholder">This is one of the task you have to do on your own</string>
     <string name="inputTask">Write your task here</string>
     <string name="delete_all_from_pending">Are you sure you want to delete all the pending record from Database?</string>
+    <string name="list_empty">List is already empty</string>
     <string name="delete_all_from_completed">Are you sure you want to delete all the completed record from Database?</string>
     <string name="info_title">App Info</string>
-    <string name="info_content">Hi. This is to guide you to use the app.\n
+    <string name="info_content">Hi. This is to guide you to use the app.\n\n\n
         You can add/remove task according to your need.\n
         \t1. To add a task, Tap on the bottom most button with "+" symbol.\n
         \t2. Write the task you want to add\n
         \t3. You can set the priority as well by selecting any of the option given below the input field\n
         \t4. You can select time as well to set a reminder at a required time\n
-        Tap on the check box to mark the task as completed\n
-        To check the tasks you have completed already you can swipe left.\n
+        Tap on the check box to mark the task as completed\n\n
+        To check the tasks you have completed already you can swipe left.\n\n
         To mark the task as not completed you have to tap the check box in completed section\n
     </string>
 

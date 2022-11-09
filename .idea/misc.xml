@@ -20,10 +20,11 @@
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog_item.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.19375" />
-        <entry key="app/src/main/res/layout/fragment_todo.xml" value="0.19375" />
+        <entry key="app/src/main/res/layout/fragment_todo.xml" value="0.22" />
         <entry key="app/src/main/res/layout/information_popup_content.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/layout/input_field.xml" value="0.22" />
         <entry key="app/src/main/res/layout/task_list.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/window_pop_up.xml" value="0.1" />
         <entry key="app/src/main/res/menu/item_list_menu.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.19375" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.126" />

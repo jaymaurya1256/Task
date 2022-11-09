@@ -2,6 +2,7 @@ package com.example.task.adapters
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,10 @@ import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.log
+import kotlin.math.min
 
+private const val TAG = "PendingAdapter"
 class PendingAdapter(private val taskList: List<Task>, private val onClick: (Task, ClickType)  -> Unit) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
@@ -44,12 +48,18 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
             "MEDIUM" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.dark_orange))
             "HIGH" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red))
         }
+        Log.d(TAG, "onBindViewHolder: Going to convert time in millis to time in hour")
         val hour = SimpleDateFormat("hh", Locale.getDefault()).format(taskList[position].time).toLong()
+        Log.d(TAG, "onBindViewHolder: Hour = $hour")
         val minute = SimpleDateFormat("mm", Locale.getDefault()).format(taskList[position].time).toLong()
+        Log.d(TAG, "onBindViewHolder: Minutes = $minute")
         val amPm = SimpleDateFormat("a", Locale.getDefault()).format(taskList[position].time)
+        Log.d(TAG, "onBindViewHolder: ampm = $amPm")
         val string = "${hour}:${minute} $amPm"
+        Log.d(TAG, "onBindViewHolder: String $string")
         if (taskList[position].time != 0L) {
             holder.alarmTimeDisplay.text = string
+            Log.d(TAG, "onBindViewHolder: Textset on alarmtimedisplay = $string")
         }
         //Set the reminder time
         holder.radioButton.setOnClickListener {

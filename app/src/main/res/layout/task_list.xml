@@ -9,7 +9,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/list_item"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,17 +24,16 @@
                 app:layout_constraintBottom_toBottomOf="parent" />
             <TextView
                 android:id="@+id/listItemTextField"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="15dp"
                 android:textSize="@dimen/text_size_of_tasks"
                 android:shadowColor="@color/black"
                 android:shadowDx="1.5"
                 android:shadowDy="1.3"
                 android:textColor="@color/white"
                 android:text="@string/task_placeholder"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/list_item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/checkBox_complete"/>

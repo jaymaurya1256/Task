@@ -11,15 +11,18 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.task.adapters.CompletedAdapter
 import com.example.task.database.DBHolder
+import com.example.task.database.Task
 import com.example.task.database.TaskDatabase
 import com.example.task.databinding.FragmentCompletedBinding
 import com.example.task.models.ClickType
 import com.example.task.models.TaskViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -35,12 +38,13 @@ class CompletedFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var taskCompleted: LiveData<List<Task>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        taskCompleted = sharedViewModel.completedTask
         _binding = FragmentCompletedBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -74,15 +78,19 @@ class CompletedFragment : Fragment() {
             }
         }
         binding.clearAll.setOnClickListener {
-            val alertDialog = AlertDialog.Builder(requireContext())
-            alertDialog.setMessage(R.string.delete_all_from_completed)
-            alertDialog.setPositiveButton(android.R.string.yes){ _, _ ->
-                sharedViewModel.deleteAllFromCompleted()
+            if (taskCompleted.value!!.isEmpty()){
+                Snackbar.make(it,R.string.list_empty,Snackbar.LENGTH_SHORT).show()
+            }else{
+                val alertDialog = AlertDialog.Builder(requireContext())
+                alertDialog.setMessage(R.string.delete_all_from_completed)
+                alertDialog.setPositiveButton(android.R.string.yes){ _, _ ->
+                    sharedViewModel.deleteAllFromCompleted()
+                }
+                alertDialog.setNegativeButton(android.R.string.no){ dialog,_ ->
+                    dialog.cancel()
+                }
+                alertDialog.show()
             }
-            alertDialog.setNegativeButton(android.R.string.no){ dialog,_ ->
-                dialog.cancel()
-            }
-            alertDialog.show()
         }
     }
 

@@ -10,8 +10,8 @@
 
     <TextView
         android:id="@+id/infoContentText"
-        android:layout_width="344dp"
-        android:layout_height="653dp"
+        android:layout_width="350dp"
+        android:layout_height="700dp"
         android:text="@string/info_content"
         android:textSize="@dimen/text_size_for_info_content"
         android:textStyle="bold"
