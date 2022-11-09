@@ -48,16 +48,16 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
             "MEDIUM" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.dark_orange))
             "HIGH" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red))
         }
-        Log.d(TAG, "onBindViewHolder: Going to convert time in millis to time in hour")
-        val hour = SimpleDateFormat("hh", Locale.getDefault()).format(taskList[position].time).toLong()
-        Log.d(TAG, "onBindViewHolder: Hour = $hour")
-        val minute = SimpleDateFormat("mm", Locale.getDefault()).format(taskList[position].time).toLong()
-        Log.d(TAG, "onBindViewHolder: Minutes = $minute")
-        val amPm = SimpleDateFormat("a", Locale.getDefault()).format(taskList[position].time)
-        Log.d(TAG, "onBindViewHolder: ampm = $amPm")
-        val string = "${hour}:${minute} $amPm"
-        Log.d(TAG, "onBindViewHolder: String $string")
         if (taskList[position].time != 0L) {
+            Log.d(TAG, "onBindViewHolder: Going to convert time in millis to time in hour")
+            val hour = SimpleDateFormat("hh", Locale.getDefault()).format(taskList[position].time).toLong()
+            Log.d(TAG, "onBindViewHolder: Hour = $hour")
+            val minute = SimpleDateFormat("mm", Locale.getDefault()).format(taskList[position].time).toLong()
+            Log.d(TAG, "onBindViewHolder: Minutes = $minute")
+            val amPm = SimpleDateFormat("a", Locale.getDefault()).format(taskList[position].time)
+            Log.d(TAG, "onBindViewHolder: ampm = $amPm")
+            val string = "${hour}:${minute} $amPm"
+            Log.d(TAG, "onBindViewHolder: String $string")
             holder.alarmTimeDisplay.text = string
             Log.d(TAG, "onBindViewHolder: Textset on alarmtimedisplay = $string")
         }
