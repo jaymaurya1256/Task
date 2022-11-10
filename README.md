@@ -2,19 +2,19 @@
 This is the task Application which works same as a traditional notebook for remembering the task we need to do.
 
 # Major Component
-Kotlin
+- Kotlin
 
-Android SDK 33
+- Android SDK 33
 
-MVVM with Repository
+- MVVM with Repository
 
-Navigation Component (fragments)
+- Navigation Component (fragments)
 
-Lottie
+- Lottie
 
-Room
+- Room
 
-## Animations in action
+## Demo
 
 https://user-images.githubusercontent.com/68942264/201037197-a0ed6334-18cc-40e1-b015-9452513464d6.mp4
 
