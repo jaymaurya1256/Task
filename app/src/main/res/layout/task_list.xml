@@ -39,10 +39,9 @@
                 app:layout_constraintStart_toEndOf="@+id/checkBox_complete"/>
             <TextView
                 android:id="@+id/alarmTimeDisplay"
-                android:layout_width="70dp"
-                android:layout_marginEnd="3dp"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="4dp"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

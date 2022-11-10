@@ -34,6 +34,8 @@ class ToDoFragment : Fragment() {
 
     private val sharedViewModel: TaskViewModel by activityViewModels()
 
+    lateinit var adapter: PendingAdapter
+
 
     private var _binding: FragmentTodoBinding? = null
     private val binding get() = _binding!!
@@ -52,6 +54,21 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
+
+        adapter = PendingAdapter { task, clickType ->
+            when (clickType) {
+                ClickType.SHORT -> sharedViewModel.markCompleted(task)
+                ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
+                else -> {
+                    val action =
+                        HomeFragmentDirections.actionHomeFragmentToAddTaskFragment(task.id)
+                    findNavController().navigate(action)
+                }
+            }
+        }
+
+        binding.recyclerViewForFragmentToDo.adapter = adapter
+
         val lottieAnimationView = binding.lottieTodo
         sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
             if (it.isEmpty()){
@@ -65,20 +82,8 @@ class ToDoFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch{
-            sharedViewModel.pendingTask.observe(viewLifecycleOwner) { it ->
-                binding.recyclerViewForFragmentToDo.adapter = PendingAdapter(it) { task, clickType ->
-                    when (clickType) {
-                        ClickType.SHORT -> sharedViewModel.markCompleted(task)
-                        ClickType.LONG_DELETE -> sharedViewModel.deleteTask(task)
-                        else -> {
-                            val action =
-                                HomeFragmentDirections.actionHomeFragmentToAddTaskFragment(task.id)
-                            findNavController().navigate(action)
-                        }
-                    }
-                }
-            }
+        sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
         binding.fabAddTask.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTaskFragment)
