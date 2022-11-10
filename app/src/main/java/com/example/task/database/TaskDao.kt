@@ -12,7 +12,7 @@ interface TaskDao  {
     fun getAllCompleted(): LiveData<List<Task>>
 
     @Query("SELECT * FROM Task WHERE id == :id")
-    fun getTask(id: Int): Task
+    suspend fun getTask(id: Int): Task
 
     @Insert
     suspend fun addTask(task: Task)
@@ -22,4 +22,10 @@ interface TaskDao  {
 
     @Delete
     suspend fun removeTask(task: Task)
+
+    @Query("DELETE FROM Task WHERE isActive != 0 ")
+    suspend fun deleteAllFromPending()
+
+    @Query("DELETE FROM Task WHERE isActive == 0")
+    suspend fun deleteAllFromCompleted()
 }

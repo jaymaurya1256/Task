@@ -1,26 +1,43 @@
 package com.example.task.adapters
 
+import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ListView
 import android.widget.PopupMenu
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.task.Color.ArtificialColors
 import com.example.task.R
 import com.example.task.database.Task
 import com.example.task.models.ClickType
+import com.google.android.material.card.MaterialCardView
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.log
+import kotlin.math.min
 
-class PendingAdapter(private val taskList: List<Task>, private val onClick: (Task, ClickType)  -> Unit) : RecyclerView.Adapter<PendingAdapter.PendingViewHolder>(){
+private const val TAG = "PendingAdapter"
+class PendingAdapter(
+    private val onClick: (Task, ClickType)  -> Unit
+) : ListAdapter<Task, PendingAdapter.PendingViewHolder>(TaskDiff()) {
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
-        val cardView: CardView = itemView.findViewById(R.id.cardView)
+        val cardView: MaterialCardView = itemView.findViewById(R.id.cardView)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
         val radioButton: CheckBox = itemView.findViewById(R.id.checkBox_complete)
+        val alarmTimeDisplay: TextView = itemView.findViewById(R.id.alarmTimeDisplay)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingViewHolder {
@@ -29,17 +46,33 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
     }
 
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
-        holder.textView.text = taskList[position].task
-        //Set the card color according to priority
-        when(taskList[position].priority){
-            "Low" -> holder.cardView.setCardBackgroundColor(Color.GREEN)
-            "Medium" -> holder.cardView.setCardBackgroundColor(Color.YELLOW)
-            "High" -> holder.cardView.setCardBackgroundColor(Color.RED)
+        val task = getItem(position)
+        holder.textView.text = task.task
+        
+        val context = holder.cardView.context
+        when(task.priority){
+            "LOW" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.dark_green))
+            "MEDIUM" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.dark_orange))
+            "HIGH" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red))
+        }
+        
+        Log.d(TAG, "Position: $position, task: $task")
+        if (task.time != 0L) {
+            val hour = SimpleDateFormat("hh", Locale.getDefault()).format(task.time).toLong()
+            val minute = SimpleDateFormat("mm", Locale.getDefault()).format(task.time).toLong()
+            val amPm = SimpleDateFormat("a", Locale.getDefault()).format(task.time)
+            val string = "${hour}:${minute} $amPm"
+            Log.d(TAG, "onBindViewHolder: Time $string for position $position")
+            holder.alarmTimeDisplay.visibility = View.VISIBLE
+            holder.alarmTimeDisplay.text = string
+        } else {
+            holder.alarmTimeDisplay.visibility = View.GONE
+            Log.d(TAG, "onBindViewHolder: Hiding view at position $position, task item time: ${task.time}")
         }
         //Set the reminder time
         holder.radioButton.setOnClickListener {
             //lambda implementation should be there i.e sharedViewModel should not be used here
-            onClick( taskList[position], ClickType.SHORT)
+            onClick(task, ClickType.SHORT)
         }
         holder.listItem.setOnLongClickListener { p0 ->
             val popupMenu = PopupMenu(p0?.context, p0)
@@ -47,11 +80,11 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
             popupMenu.setOnMenuItemClickListener { it ->
                 when (it.itemId) {
                     R.id.delete -> {
-                        onClick( taskList[holder.adapterPosition], ClickType.LONG_DELETE )
+                        onClick(task, ClickType.LONG_DELETE)
                         true
                     }
                     R.id.edit -> {
-                        onClick( taskList[holder.adapterPosition], ClickType.LONG_EDIT )
+                        onClick(task, ClickType.LONG_EDIT)
                         true
                     }
                     else -> true
@@ -62,8 +95,14 @@ class PendingAdapter(private val taskList: List<Task>, private val onClick: (Tas
             true
         }
     }
+}
 
-    override fun getItemCount(): Int {
-        return taskList.size
+class TaskDiff : DiffUtil.ItemCallback<Task>() {
+    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+        return oldItem == newItem
     }
 }

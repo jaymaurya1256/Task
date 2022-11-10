@@ -1,5 +1,6 @@
 package com.example.task
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,16 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.task.adapters.CompletedAdapter
 import com.example.task.database.DBHolder
+import com.example.task.database.Task
 import com.example.task.database.TaskDatabase
 import com.example.task.databinding.FragmentCompletedBinding
 import com.example.task.models.ClickType
 import com.example.task.models.TaskViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -32,19 +38,34 @@ class CompletedFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var taskCompleted: LiveData<List<Task>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        taskCompleted = sharedViewModel.completedTask
         _binding = FragmentCompletedBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val lottieAnimationView = binding.lottieCompleted
+        sharedViewModel.completedTask.observe(viewLifecycleOwner) {
+            if (it.isEmpty()){
+                lottieAnimationView.visibility = View.VISIBLE
+                lottieAnimationView.setAnimation(R.raw.completed_animation)
+                lottieAnimationView.loop(true)
+                lottieAnimationView.playAnimation()
+            }
+            else{
+                lottieAnimationView.visibility = View.GONE
+            }
+        }
+
         binding.recyclerViewForFragmentCompleted.layoutManager = LinearLayoutManager(activity)
         lifecycleScope.launch{
             sharedViewModel.completedTask.observe(viewLifecycleOwner) {
@@ -54,6 +75,21 @@ class CompletedFragment : Fragment() {
                         else -> {sharedViewModel.deleteTask(task)}
                     }
                 }
+            }
+        }
+        binding.clearAll.setOnClickListener {
+            if (taskCompleted.value!!.isEmpty()){
+                Snackbar.make(it,R.string.list_empty,Snackbar.LENGTH_SHORT).show()
+            }else{
+                val alertDialog = AlertDialog.Builder(requireContext())
+                alertDialog.setMessage(R.string.delete_all_from_completed)
+                alertDialog.setPositiveButton(android.R.string.yes){ _, _ ->
+                    sharedViewModel.deleteAllFromCompleted()
+                }
+                alertDialog.setNegativeButton(android.R.string.no){ dialog,_ ->
+                    dialog.cancel()
+                }
+                alertDialog.show()
             }
         }
     }

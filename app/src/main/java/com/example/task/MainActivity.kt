@@ -13,6 +13,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.task.adapters.ViewPager2Adapter
 import com.example.task.database.Task
 import com.example.task.database.TaskDatabase
@@ -30,9 +32,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val listOfFragment = listOf<Fragment>(ToDoFragment(), CompletedFragment())
-        binding.viewPager2.viewPager.adapter = ViewPager2Adapter(listOfFragment,this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

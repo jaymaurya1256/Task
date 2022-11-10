@@ -3,21 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/toDoFragment">
+    app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/toDoFragment"
         android:name="com.example.task.ToDoFragment"
-        android:label="ToDoFragment" >
-        <action
-            android:id="@+id/action_toDoFragment_to_completedFragment"
-            app:destination="@id/completedFragment" />
-    </fragment>
+        android:label="ToDoFragment" />
     <fragment
         android:id="@+id/completedFragment"
         android:name="com.example.task.CompletedFragment"
-        android:label="CompletedFragment" >
+        android:label="CompletedFragment" />
+    <dialog
+        android:id="@+id/addTaskFragment"
+        android:name="com.example.task.AddTaskFragment"
+        android:label="AddTaskFragment" >
+        <argument
+            android:name="taskId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </dialog>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.task.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_completedFragment_to_toDoFragment"
-            app:destination="@id/toDoFragment" />
+            android:id="@+id/action_homeFragment_to_addTaskFragment"
+            app:destination="@id/addTaskFragment" />
     </fragment>
 </navigation>
