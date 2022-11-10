@@ -8,7 +8,9 @@ Android SDK 33
 
 MVVM with Repository
 
-Navigation Component (fragments)Lottie
+Navigation Component (fragments)
+
+Lottie
 
 Room
 
