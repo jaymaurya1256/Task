@@ -20,6 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
+                android:layout_margin="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
@@ -35,8 +36,8 @@
                 android:textColor="@color/white"
                 android:text="@string/task_placeholder"
                 app:layout_constraintEnd_toEndOf="@+id/list_item"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/checkBox_complete"
+                app:layout_constraintTop_toTopOf="@id/checkBox_complete"
                 app:layout_constraintStart_toEndOf="@+id/checkBox_complete"/>
             <TextView
                 android:id="@+id/alarmTimeDisplay"
@@ -47,6 +48,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/listItemTextField"/>
+            <ImageView
+                android:id="@+id/priority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/priority_string"
+                android:layout_margin="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

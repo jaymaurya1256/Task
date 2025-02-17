@@ -34,7 +34,7 @@ class ToDoFragment : Fragment() {
 
     private val sharedViewModel: TaskViewModel by activityViewModels()
 
-    lateinit var adapter: PendingAdapter
+    private lateinit var adapter: PendingAdapter
 
 
     private var _binding: FragmentTodoBinding? = null

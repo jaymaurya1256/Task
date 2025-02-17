@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.PopupMenu
 import android.widget.RadioButton
@@ -34,7 +35,7 @@ class PendingAdapter(
 ) : ListAdapter<Task, PendingAdapter.PendingViewHolder>(TaskDiff()) {
     class PendingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val textView: TextView = itemView.findViewById(R.id.listItemTextField)
-        val cardView: MaterialCardView = itemView.findViewById(R.id.cardView)
+        val priority: ImageView = itemView.findViewById(R.id.priority)
         val listItem: ConstraintLayout = itemView.findViewById(R.id.list_item)
         val radioButton: CheckBox = itemView.findViewById(R.id.checkBox_complete)
         val alarmTimeDisplay: TextView = itemView.findViewById(R.id.alarmTimeDisplay)
@@ -48,14 +49,13 @@ class PendingAdapter(
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
         val task = getItem(position)
         holder.textView.text = task.task
-        
-        val context = holder.cardView.context
+
         when(task.priority){
-            "LOW" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.dark_green))
-            "MEDIUM" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.dark_orange))
-            "HIGH" -> holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.red))
+            "LOW" -> holder.priority.setBackgroundResource(R.drawable.green_dot)
+            "MEDIUM" -> holder.priority.setBackgroundResource(R.drawable.yellow_dot)
+            "HIGH" -> holder.priority.setBackgroundResource(R.drawable.red_dot)
         }
-        
+
         Log.d(TAG, "Position: $position, task: $task")
         if (task.time != 0L) {
             val hour = SimpleDateFormat("hh", Locale.getDefault()).format(task.time).toLong()

@@ -1,9 +1,13 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.Task" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:textAppearance">@style/TextAppearance.Task</item>
     </style>
 
-    <style name="Theme.Task" parent="Base.Theme.Task" />
+    <style name="Theme.Task" parent="Base.Theme.Task">
+        <item name="android:textAppearance">@style/TextAppearance.Task</item>
+    </style>
+
+    <style name="TextAppearance.Task" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/averta_regular</item>
+    </style>
 </resources>
