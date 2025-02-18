@@ -1,9 +1,13 @@
 package com.example.task
 
+import android.app.AlarmManager
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
@@ -55,6 +60,24 @@ class ToDoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerViewForFragmentToDo.layoutManager = LinearLayoutManager(activity)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager =
+                requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (!alarmManager.canScheduleExactAlarms()) {
+                val settingIntent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = Uri.parse("package:${requireContext().applicationContext.packageName}")
+                }
+                ContextCompat.startActivity(requireContext(), settingIntent, null)
+            }
+        }
+        if (!isIgnoringBatteryOptimizations(requireContext().applicationContext)) {
+            val intent = Intent(
+                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                Uri.parse("package:${requireContext().applicationContext.packageName}")
+            )
+            startActivity(intent)
+        }
+
         adapter = PendingAdapter { task, clickType ->
             when (clickType) {
                 ClickType.SHORT -> sharedViewModel.markCompleted(task)
@@ -71,13 +94,12 @@ class ToDoFragment : Fragment() {
 
         val lottieAnimationView = binding.lottieTodo
         sharedViewModel.pendingTask.observe(viewLifecycleOwner) {
-            if (it.isEmpty()){
+            if (it.isEmpty()) {
                 lottieAnimationView.visibility = View.VISIBLE
                 lottieAnimationView.setAnimation(R.raw.todo_animation)
                 lottieAnimationView.loop(true)
                 lottieAnimationView.playAnimation()
-            }
-            else{
+            } else {
                 lottieAnimationView.visibility = View.GONE
             }
         }
@@ -88,15 +110,10 @@ class ToDoFragment : Fragment() {
         binding.fabAddTask.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTaskFragment)
         }
-        binding.info.setOnClickListener{
-            val intent = Intent(this.context, PopUpWindow::class.java)
-            startActivity(intent)
-        }
         binding.clearAll.setOnClickListener {
-            if(taskTodo.value!!.isEmpty()){
-                Snackbar.make(it, R.string.list_empty,Snackbar.LENGTH_SHORT).show()
-            }
-            else{
+            if (taskTodo.value!!.isEmpty()) {
+                Snackbar.make(it, R.string.list_empty, Snackbar.LENGTH_SHORT).show()
+            } else {
                 val alertDialog = AlertDialog.Builder(requireContext())
                 alertDialog.setMessage(R.string.delete_all_from_pending)
                 alertDialog.setCancelable(false)

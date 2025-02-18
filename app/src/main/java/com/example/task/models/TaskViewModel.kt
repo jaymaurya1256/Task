@@ -5,29 +5,20 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
-import android.view.View
-import android.widget.TimePicker
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.*
-import androidx.room.Room
+import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.task.AlarmReceiver
-import com.example.task.MainActivity
-import com.example.task.TaskApplication
 import com.example.task.database.DBHolder
 import com.example.task.database.Task
-import com.example.task.database.TaskDatabase
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.Nullable
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.math.min
+import java.util.Calendar
 
 private const val TAG = "TaskViewModel"
 
@@ -119,13 +110,26 @@ class TaskViewModel(private val app: Application) : AndroidViewModel(app) {
         val pendingIntent = PendingIntent.getBroadcast(app, task.id, intent, PendingIntent.FLAG_IMMUTABLE)
         val triggerTime = task.time
         Log.d(TAG, "setAlarm: $triggerTime")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (alarmManager.canScheduleExactAlarms()) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    triggerTime,
+                    pendingIntent
+                )
+            } else {
+                val settingIntent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = Uri.parse("package:${app.packageName}")
+                }
+                startActivity(app,settingIntent, null)
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 triggerTime,
                 pendingIntent
             )
-        } else {
+        }else{
             alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
         }
     }

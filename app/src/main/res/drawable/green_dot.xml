@@ -4,4 +4,6 @@
 
     <solid android:color="#00FF00"/> <!-- Green color -->
     <size android:width="10dp" android:height="10dp"/> <!-- Adjust size -->
+    <stroke android:width="1px" android:color="#000000"/> <!-- Black border -->
+
 </shape>

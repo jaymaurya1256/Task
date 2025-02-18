@@ -19,7 +19,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
             val notification = NotificationCompat.Builder(context!!, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle("Reminder")
+                .setContentTitle("You have a task to complete!")
                 .setContentText(p1?.action ?: "You have a task to complete!")
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)

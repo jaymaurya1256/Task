@@ -4,6 +4,8 @@
     package="com.example.task">
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+
     <application
         android:name=".TaskApplication"
         android:allowBackup="true"
@@ -26,12 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".PopUpWindow"
-            android:label="@string/info_title"
-            android:theme="@style/Base.Theme.Task" />
-
         <receiver android:name=".AlarmReceiver"
             android:enabled="true" />
     </application>

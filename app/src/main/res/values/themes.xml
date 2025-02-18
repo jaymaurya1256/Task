@@ -1,13 +1,11 @@
 <resources>
     <style name="Base.Theme.Task" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:textAppearance">@style/TextAppearance.Task</item>
+        <item name="android:fontFamily">@font/averta_regular</item>
     </style>
 
     <style name="Theme.Task" parent="Base.Theme.Task">
-        <item name="android:textAppearance">@style/TextAppearance.Task</item>
     </style>
 
     <style name="TextAppearance.Task" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:fontFamily">@font/averta_regular</item>
     </style>
 </resources>

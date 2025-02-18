@@ -1,8 +1,11 @@
 package com.example.task.models
 
 import android.content.Context
+import android.os.Build
+import android.os.PowerManager
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 
 enum class ClickType {
@@ -35,4 +38,16 @@ fun View.hide() {
 
 fun View.show() {
     this.visibility = View.VISIBLE
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun isIgnoringBatteryOptimizations(context: Context): Boolean {
+    val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+    return powerManager.isIgnoringBatteryOptimizations(context.packageName)
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun isDozeModeEnabled(context: Context): Boolean {
+    val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+    return powerManager.isDeviceIdleMode
 }

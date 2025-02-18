@@ -34,7 +34,7 @@ class CompletedAdapter(private val task: List<Task>, private val onClick: (Task,
         val myColor = ArtificialColors()
         holder.textView.text = task[position].task
         holder.textView.setTextColor(Color.WHITE)
-        holder.cardView.setCardBackgroundColor(myColor.BLUE_COLOR)
+        holder.cardView.setCardBackgroundColor(Color.DKGRAY)
         holder.radioButton.isChecked = true // Since this is the completed adapter, all the tasks will be checked
         holder.radioButton.setOnClickListener{
             onClick(task[holder.adapterPosition],ClickType.SHORT,it)

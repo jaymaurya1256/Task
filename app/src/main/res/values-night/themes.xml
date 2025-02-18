@@ -1,7 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Task" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:textAppearance">@style/TextAppearance.Task</item>
-
+        <item name="android:fontFamily">@font/averta_regular</item>
     </style>
 </resources>

@@ -40,5 +40,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="priority_string">Priority</string>
+    <string name="delete_all_the_record">Delete all the record</string>
+    <string name="info">Info</string>
 
 </resources>

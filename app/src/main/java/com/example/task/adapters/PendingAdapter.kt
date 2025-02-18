@@ -1,33 +1,22 @@
 package com.example.task.adapters
 
-import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
-import android.widget.ListView
 import android.widget.PopupMenu
-import android.widget.RadioButton
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.task.Color.ArtificialColors
 import com.example.task.R
 import com.example.task.database.Task
 import com.example.task.models.ClickType
-import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.math.log
-import kotlin.math.min
+import java.util.Locale
 
 private const val TAG = "PendingAdapter"
 class PendingAdapter(
